@@ -14,6 +14,9 @@
     <!-- Google Fonts for Arabic -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
         body {
             font-family: 'Tajawal', sans-serif;
@@ -35,6 +38,10 @@
         .animate-float-delayed {
             animation: float 6s ease-in-out infinite;
             animation-delay: 3s;
+        }
+
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
 
         @keyframes fadeIn {
@@ -101,24 +108,110 @@
             100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
         }
 
-        /* Chat Bot Animations */
-        .chat-enter {
-            transform: scale(0.95);
-            opacity: 0;
+        /* AI Gradient Text */
+        .text-gradient-ai {
+            background: linear-gradient(to right, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .chat-enter-active {
-            transform: scale(1);
-            opacity: 1;
-            transition: all 0.3s ease-out;
+        
+        .border-gradient-ai {
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(to right, #3b82f6, #8b5cf6) border-box;
         }
-        .chat-exit {
-            transform: scale(1);
-            opacity: 1;
+
+        /* Chat Widget Styles */
+        .chat-widget-container {
+            position: fixed;
+            bottom: 100px;
+            left: 24px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* Aligns to left in RTL context if direction is mixed, but fixed left ensures placement */
+            pointer-events: none; 
         }
-        .chat-exit-active {
-            transform: scale(0.95);
-            opacity: 0;
-            transition: all 0.2s ease-in;
+        
+        /* Specific override for the fixed container to ensure clickability */
+        .chat-widget-container > * {
+            pointer-events: auto;
+        }
+        
+        .chat-window {
+            width: 350px;
+            height: 450px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+            transform-origin: bottom left;
+            transition: all 0.3s ease;
+        }
+
+        .chat-window.open {
+            display: flex;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background-color: #f8fafc;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .message.user {
+            background-color: #0056b3;
+            color: white;
+            align-self: flex-start; /* User on Right in RTL */
+            border-bottom-right-radius: 2px;
+        }
+
+        .message.ai {
+            background-color: white;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+            align-self: flex-end; /* AI on Left in RTL */
+            border-bottom-left-radius: 2px;
+        }
+        
+        .typing-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #94a3b8;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+            margin-right: 2px;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
         }
     </style>
     
@@ -178,6 +271,10 @@
                     <button onclick="navigateTo('home')" class="nav-link text-slate-600 hover:text-blue-600 font-medium transition-colors py-2" data-page="home">الرئيسية</button>
                     <button onclick="navigateTo('about')" class="nav-link text-slate-600 hover:text-blue-600 font-medium transition-colors py-2" data-page="about">من نحن</button>
                     <button onclick="navigateTo('services')" class="nav-link text-slate-600 hover:text-blue-600 font-medium transition-colors py-2" data-page="services">خدماتنا</button>
+                    <!-- New AI Feature Link -->
+                    <button onclick="navigateTo('ai-advisor')" class="nav-link text-indigo-600 hover:text-indigo-800 font-bold transition-colors py-2 flex items-center gap-1">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i> المستشار الذكي
+                    </button>
                     <button onclick="navigateTo('projects')" class="nav-link text-slate-600 hover:text-blue-600 font-medium transition-colors py-2" data-page="projects">مشاريعنا</button>
                     <button onclick="navigateTo('faq')" class="nav-link text-slate-600 hover:text-blue-600 font-medium transition-colors py-2" data-page="faq">الأسئلة الشائعة</button>
                 </div>
@@ -202,6 +299,9 @@
                 <button onclick="navigateTo('home')" class="text-right font-medium p-3 rounded-lg hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors flex justify-between items-center">
                     الرئيسية <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
                 </button>
+                <button onclick="navigateTo('ai-advisor')" class="text-right font-bold p-3 rounded-lg bg-indigo-50 text-indigo-600 hover:text-indigo-800 transition-colors flex justify-between items-center">
+                    المستشار الذكي ✨ <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
+                </button>
                 <button onclick="navigateTo('about')" class="text-right font-medium p-3 rounded-lg hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors flex justify-between items-center">
                     من نحن <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
                 </button>
@@ -210,9 +310,6 @@
                 </button>
                 <button onclick="navigateTo('projects')" class="text-right font-medium p-3 rounded-lg hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors flex justify-between items-center">
                     مشاريعنا <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
-                </button>
-                 <button onclick="navigateTo('faq')" class="text-right font-medium p-3 rounded-lg hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors flex justify-between items-center">
-                    الأسئلة الشائعة <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
                 </button>
                 <button onclick="navigateTo('contact')" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold shadow-md mt-4 flex justify-center items-center gap-2">
                     <i data-lucide="phone" class="w-4 h-4"></i> اتصل بنا
@@ -256,8 +353,9 @@
                         </p>
                         
                         <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                            <button onclick="navigateTo('contact')" class="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold shadow-lg shadow-blue-500/20 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
-                                احجز موعد الآن <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                            <button onclick="navigateTo('ai-advisor')" class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                                <i data-lucide="sparkles" class="w-5 h-5"></i>
+                                تشخيص الأعطال بالذكاء الاصطناعي
                             </button>
                             <button onclick="navigateTo('services')" class="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold backdrop-blur-sm transition-all flex items-center justify-center gap-2">
                                 استكشف خدماتنا <i data-lucide="arrow-left" class="w-5 h-5"></i>
@@ -383,37 +481,6 @@
                 </div>
             </section>
 
-            <!-- About Teaser -->
-            <section class="py-20 bg-white">
-                <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-16">
-                    <div class="md:w-1/2 relative">
-                        <div class="absolute -top-4 -left-4 w-24 h-24 bg-blue-100 rounded-full z-0"></div>
-                        <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-amber-50 rounded-full z-0"></div>
-                        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800" alt="About Team" class="rounded-2xl shadow-2xl w-full relative z-10 object-cover h-[400px]">
-                        <div class="absolute bottom-8 right-8 bg-white p-4 rounded-xl shadow-lg z-20 flex items-center gap-3 animate-fade-in">
-                            <div class="bg-green-100 p-2 rounded-full"><i data-lucide="award" class="w-6 h-6 text-green-600"></i></div>
-                            <div>
-                                <p class="text-xs text-slate-500 font-bold">خبرة أكثر من</p>
-                                <p class="text-xl font-bold text-slate-800">10 سنوات</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2">
-                        <span class="text-blue-600 font-bold uppercase tracking-wider text-sm bg-blue-50 px-3 py-1 rounded-full">من نحن</span>
-                        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-4 mb-6 leading-tight">شريكك الموثوق <br/> لخدمات <span class="text-blue-600">الصيانة المتكاملة</span></h2>
-                        <p class="text-slate-600 leading-relaxed mb-6 text-lg">
-                            في سفن برذرز إلكترو (SB Electro)، نقدم خدمات كهروميكانيكية من الدرجة الأولى مع التزام بالجودة ورضا العملاء. سواء كان إصلاحاً بسيطاً أو تركيباً كبيراً، فريقنا في مدينة خليفة أ يقدم التميز والاحترافية.
-                        </p>
-                        <ul class="space-y-4 mb-8">
-                            <li class="flex items-center gap-3 text-slate-700 font-medium p-3 bg-slate-50 rounded-lg"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 flex-shrink-0"></i> فنيون ذوو خبرة وكفاءة عالية</li>
-                            <li class="flex items-center gap-3 text-slate-700 font-medium p-3 bg-slate-50 rounded-lg"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 flex-shrink-0"></i> أسعار تنافسية وشفافة</li>
-                            <li class="flex items-center gap-3 text-slate-700 font-medium p-3 bg-slate-50 rounded-lg"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 flex-shrink-0"></i> ضمان على جميع أعمال الصيانة</li>
-                        </ul>
-                        <button onclick="navigateTo('about')" class="px-8 py-3 border-2 border-blue-600 text-blue-600 font-bold rounded-lg hover:bg-blue-600 hover:text-white transition-all shadow-md hover:shadow-lg">المزيد عنا</button>
-                    </div>
-                </div>
-            </section>
-
             <!-- Home Services Grid -->
             <section class="py-24 bg-slate-50">
                 <div class="container mx-auto px-6">
@@ -432,6 +499,100 @@
                     </div>
                 </div>
             </section>
+        </div>
+
+        <!-- AI ADVISOR PAGE (New Feature) -->
+        <div id="ai-advisor" class="page-section hidden animate-fade-in">
+            <div class="bg-gradient-to-br from-indigo-900 to-purple-900 py-24 text-white relative overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/circuit-board.png')] opacity-10"></div>
+                <div class="container mx-auto px-6 relative z-10 text-center">
+                    <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm font-bold mb-6 backdrop-blur-md">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i> مدعوم بالذكاء الاصطناعي
+                    </div>
+                    <h1 class="text-4xl md:text-6xl font-extrabold mb-6">مستشار الصيانة الذكي ✨</h1>
+                    <p class="text-xl text-indigo-100 max-w-2xl mx-auto leading-relaxed">
+                        هل تواجه مشكلة في منزلك؟ صف المشكلة وسيقوم الذكاء الاصطناعي بتشخيص العطل، تحديد مدى الخطورة، واقتراح الحل المناسب فوراً.
+                    </p>
+                </div>
+            </div>
+
+            <div class="container mx-auto px-6 -mt-16 pb-24 relative z-20">
+                <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden max-w-4xl mx-auto flex flex-col md:flex-row">
+                    
+                    <!-- Input Section -->
+                    <div class="md:w-1/2 p-8 md:p-12 border-l border-slate-100">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-6">صف المشكلة التي تواجهها</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">ما هي المشكلة؟</label>
+                                <textarea id="ai-problem-input" rows="5" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition resize-none" placeholder="مثال: المكيف يخرج هواء حار ويصدر صوت عالي..."></textarea>
+                            </div>
+                            <button onclick="analyzeProblem()" id="analyze-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2 group">
+                                <span>تحليل المشكلة</span>
+                                <i data-lucide="search" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                            </button>
+                        </div>
+                        <div class="mt-8 pt-6 border-t border-slate-100">
+                            <p class="text-xs text-slate-400 text-center">يعتمد التحليل على تقنيات Gemini AI. النتائج هي اقتراحات أولية ولا تغني عن الفحص الفني المباشر.</p>
+                        </div>
+                    </div>
+
+                    <!-- Result Section -->
+                    <div class="md:w-1/2 bg-slate-50 p-8 md:p-12 flex flex-col justify-center min-h-[400px]" id="ai-result-container">
+                        
+                        <!-- Initial State -->
+                        <div id="ai-initial-state" class="text-center text-slate-400">
+                            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-200">
+                                <i data-lucide="cpu" class="w-10 h-10 text-indigo-300"></i>
+                            </div>
+                            <p class="text-lg font-medium">بانتظار وصف المشكلة...</p>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="ai-loading-state" class="hidden text-center">
+                            <div class="flex justify-center gap-2 mb-6">
+                                <div class="w-3 h-3 bg-indigo-500 rounded-full animate-bounce"></div>
+                                <div class="w-3 h-3 bg-indigo-500 rounded-full animate-bounce delay-100"></div>
+                                <div class="w-3 h-3 bg-indigo-500 rounded-full animate-bounce delay-200"></div>
+                            </div>
+                            <p class="text-indigo-600 font-bold">جاري تحليل البيانات...</p>
+                        </div>
+
+                        <!-- Result State -->
+                        <div id="ai-result-content" class="hidden space-y-6 animate-fade-in">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span id="ai-urgency-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-100 text-red-600">عاجل</span>
+                                <span class="text-sm text-slate-500 font-bold" id="ai-category">التصنيف: تكييف</span>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                                    <i data-lucide="stethoscope" class="w-5 h-5 text-indigo-600"></i> التشخيص المحتمل
+                                </h4>
+                                <p id="ai-diagnosis" class="text-slate-700 leading-relaxed text-sm bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                    قد يكون هناك تسرب في غاز التبريد أو عطل في الضاغط (الكمبروسر).
+                                </p>
+                            </div>
+
+                            <div>
+                                <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                                    <i data-lucide="shield-alert" class="w-5 h-5 text-amber-500"></i> نصيحة السلامة
+                                </h4>
+                                <p id="ai-safety" class="text-slate-700 text-sm bg-amber-50 p-3 rounded-lg border border-amber-100">
+                                    قم بإيقاف تشغيل المكيف فوراً لتجنب تلف الضاغط.
+                                </p>
+                            </div>
+
+                            <div class="pt-4">
+                                <button onclick="navigateTo('contact')" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold shadow-md transition-all flex items-center justify-center gap-2">
+                                    <i data-lucide="phone" class="w-4 h-4"></i> احجز فني مختص الآن
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ABOUT PAGE -->
@@ -489,7 +650,7 @@
         <!-- SERVICES PAGE -->
         <div id="services" class="page-section hidden animate-fade-in">
             <div class="bg-slate-900 py-20 mb-12 relative overflow-hidden">
-                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1647381518264-97ff1835026f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center opacity-10"></div>
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1920')] bg-cover bg-center opacity-10"></div>
                 <div class="container mx-auto px-6 relative z-10 text-center">
                     <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">خدماتنا</h1>
                     <p class="text-xl text-slate-300">حلول شاملة واحترافية لجميع احتياجاتك.</p>
@@ -571,7 +732,7 @@
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-lg mb-1 text-blue-100">الموقع</h4>
-                                    <p class="text-blue-200 leading-relaxed">144413، مدينة خليفة أ<br/>أبوظبي - الإمارات العربية المتحدة</p>
+                                    <p class="text-blue-200 leading-relaxed">أبوظبي، الإمارات</p>
                                 </div>
                             </div>
 
@@ -749,7 +910,7 @@
                             <div class="w-8 h-8 bg-white/5 rounded flex items-center justify-center group-hover:bg-blue-600 transition-colors">
                                 <i data-lucide="map-pin" class="w-4 h-4 text-blue-400 group-hover:text-white"></i>
                             </div>
-                            <span class="text-sm leading-relaxed">144413، مدينة خليفة أ، أبوظبي، الإمارات</span>
+                            <span class="text-sm leading-relaxed">أبوظبي، الإمارات</span>
                         </li>
                         <li class="flex items-center gap-3 text-slate-300 group">
                             <div class="w-8 h-8 bg-white/5 rounded flex items-center justify-center group-hover:bg-blue-600 transition-colors">
@@ -798,12 +959,16 @@
     </a>
 
     <!-- Chat Bot Button -->
-    <button onclick="toggleChat()" class="fixed bottom-24 left-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all z-50 flex items-center justify-center">
-        <i data-lucide="message-circle" class="w-8 h-8"></i>
+    <button onclick="toggleChat()" class="fixed bottom-24 left-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all z-50 flex items-center justify-center group">
+        <i data-lucide="message-circle" class="w-8 h-8 group-hover:scale-110 transition-transform"></i>
+        <span class="absolute -top-1 -right-1 flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+        </span>
     </button>
 
     <!-- Chat Window -->
-    <div id="chat-window" class="fixed bottom-0 left-0 w-full h-[70vh] rounded-t-2xl rounded-b-none md:bottom-24 md:left-6 md:w-96 md:h-[500px] md:rounded-2xl bg-white shadow-2xl z-50 hidden border border-slate-200 overflow-hidden flex flex-col transition-all origin-bottom-left transform scale-95 opacity-0">
+    <div id="chat-window" class="fixed bottom-0 left-0 w-full h-[70vh] rounded-t-2xl rounded-b-none md:bottom-36 md:left-6 md:w-96 md:h-[500px] md:rounded-2xl bg-white shadow-2xl z-50 hidden border border-slate-200 overflow-hidden flex flex-col transition-all origin-bottom-left transform scale-95 opacity-0">
         <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
@@ -828,13 +993,15 @@
             </div>
         </div>
         <div class="p-3 bg-white border-t border-slate-100 flex gap-2">
-            <input type="text" id="chat-input" class="flex-grow bg-slate-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="اكتب رسالتك..." onkeypress="handleChatInput(event)">
+            <input type="text" id="chat-input" class="flex-grow bg-slate-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="اكتب رسالتك..." onkeypress="handleChatInput(event)" autocomplete="off">
             <button onclick="sendChatMessage()" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700"><i data-lucide="send" class="w-4 h-4"></i></button>
         </div>
     </div>
 
     <!-- JavaScript Logic -->
     <script>
+        const apiKey = ""; 
+
         // Data - Services
         const SERVICES = [
             { id: "ac", title: "صيانة التكييف والدكت", icon: "wind", shortDesc: "تركيب وإصلاح وتنظيف قنوات التكييف.", fullDesc: "في حرارة الإمارات، التكييف الجيد ضرورة. نقدم خدمات شاملة لصيانة مكيفات الهواء، تنظيف الملفات، وتعبئة الغاز.", features: ["تنظيف الكويل", "تعبئة غاز", "تعقيم الدكت"], img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=800" },
@@ -882,6 +1049,94 @@
                 solution: "معالجة الشقوق وتطبيق 3 طبقات من طلاء الإيبوكسي الصناعي المقاوم للاحتكاك والمواد الكيميائية.",
                 result: "أرضية ناعمة، لامعة، وسهلة التنظيف زادت من كفاءة العمليات اللوجستية.",
                 stats: { duration: "10 أيام", type: "أرضيات" }
+            },
+            {
+                id: "mall-ac",
+                title: "تركيب تكييف مركز تجاري",
+                category: "تجاري",
+                location: "دبي مارينا",
+                img: "https://images.unsplash.com/photo-1545259741-2ea3ebf61fa3?auto=format&fit=crop&q=80&w=800",
+                challenge: "تركيب نظام تكييف مركزي لمجمع تجاري جديد مع ضمان كفاءة استهلاك الطاقة.",
+                solution: "تصميم وتنفيذ نظام VRF متطور مع وحدات تحكم ذكية لتوفير الطاقة.",
+                result: "توفير بيئة تسوق مريحة مع خفض استهلاك الطاقة بنسبة 25%.",
+                stats: { duration: "شهران", type: "تكييف مركزي" }
+            },
+            {
+                id: "tower-electrical",
+                title: "تمديدات كهربائية لفيلا فاخرة",
+                category: "سكني",
+                location: "نخلة جميرا",
+                img: "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?auto=format&fit=crop&q=80&w=800",
+                challenge: "تنفيذ تمديدات كهربائية وإضاءة ذكية لفيلا فاخرة بتصاميم معقدة.",
+                solution: "استخدام أحدث تقنيات الإضاءة LED وأنظمة التحكم الذكي (Smart Home Integration).",
+                result: "إضاءة مذهلة وتحكم كامل عبر الهاتف الذكي لجميع مرافق الفيلا.",
+                stats: { duration: "4 أسابيع", type: "كهرباء ذكية" }
+            },
+            {
+                id: "hotel-plumbing",
+                title: "صيانة سباكة فندق 5 نجوم",
+                category: "ضيافة",
+                location: "وسط مدينة دبي",
+                img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=800",
+                challenge: "تجديد شبكة السباكة القديمة في فندق قيد التشغيل دون إزعاج الضيوف.",
+                solution: "العمل في أوقات محددة وبأقسام معزولة باستخدام أنابيب صامتة وعالية المتانة.",
+                result: "تحديث كامل للشبكة دون أي شكوى من النزلاء.",
+                stats: { duration: "6 أسابيع", type: "سباكة" }
+            },
+            {
+                id: "villa-painting",
+                title: "دهانات داخلية وخارجية",
+                category: "سكني",
+                location: "المرابع العربية",
+                img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&q=80&w=800",
+                challenge: "إعادة طلاء فيلا كاملة مع معالجة تشققات الجدران الخارجية.",
+                solution: "استخدام دهانات مقاومة للحرارة والرطوبة مع معالجة احترافية للأسطح.",
+                result: "مظهر جديد وجذاب للفيلا مع حماية طويلة الأمد.",
+                stats: { duration: "أسبوعان", type: "دهانات" }
+            },
+            {
+                id: "gym-fitout",
+                title: "تجهيز صالة رياضية",
+                category: "تجاري",
+                location: "القوز",
+                img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=800",
+                challenge: "تركيب أرضيات مطاطية ونظام تهوية قوي لصالة ألعاب رياضية كبيرة.",
+                solution: "تركيب أرضيات مخصصة لامتصاص الصدمات ونظام تهوية بضغط عالي.",
+                result: "صالة رياضية آمنة وصحية جاهزة لاستقبال المشتركين.",
+                stats: { duration: "3 أسابيع", type: "أعمال مدنية" }
+            },
+            {
+                id: "clinic-maintenance",
+                title: "عقد صيانة لعيادة طبية",
+                category: "طبي",
+                location: "الشارقة",
+                img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800",
+                challenge: "الحفاظ على بيئة معقمة ومثالية لعيادة طبية تعمل على مدار الساعة.",
+                solution: "عقد صيانة سنوي يشمل التعقيم الدوري وصيانة التكييف والكهرباء.",
+                result: "بيئة عمل آمنة ومستقرة للطاقم الطبي والمرضى.",
+                stats: { duration: "مستمر", type: "AMC" }
+            },
+            {
+                id: "showroom-lighting",
+                title: "إضاءة معرض سيارات",
+                category: "تجاري",
+                location: "دبي مول",
+                img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=800",
+                challenge: "تركيب إضاءة تسلط الضوء على السيارات بشكل جذاب دون وهج.",
+                solution: "توزيع مدروس للإضاءة الموجهة (Spotlights) والإضاءة المحيطة.",
+                result: "عرض مبهر للسيارات زاد من جاذبية المعرض.",
+                stats: { duration: "أسبوع واحد", type: "كهرباء" }
+            },
+            {
+                id: "pool-maintenance",
+                title: "صيانة وترميم مسبح",
+                category: "سكني",
+                location: "تلال الإمارات",
+                img: "https://images.unsplash.com/photo-1572331165267-854da2b00cc6?auto=format&fit=crop&q=80&w=800",
+                challenge: "تسرب مياه المسبح وتلف البلاط القديم.",
+                solution: "إعادة العزل المائي وتغيير البلاط بالكامل مع صيانة المضخات.",
+                result: "مسبح كالجديد جاهز للاستخدام الصيفي.",
+                stats: { duration: "أسبوعان", type: "صيانة مسابح" }
             }
         ];
 
@@ -932,159 +1187,6 @@
             </div>`;
         }
 
-        // Hero Image Slider Logic
-        const heroImages = [
-            "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=600",
-            "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=600",
-            "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=600",
-            "https://images.unsplash.com/photo-1647381518264-97ff1835026f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        ];
-        let currentHeroImage = 0;
-
-        function startHeroSlider() {
-            setInterval(() => {
-                currentHeroImage = (currentHeroImage + 1) % heroImages.length;
-                const img = document.getElementById('hero-slider-img');
-                if(img) {
-                    img.style.opacity = '0'; // Fade out
-                    setTimeout(() => {
-                        img.src = heroImages[currentHeroImage];
-                        img.onload = () => { img.style.opacity = '1'; }; // Fade in on load
-                    }, 300); 
-                }
-            }, 2000); // Change every 2 seconds
-        }
-
-        // --- Chat Bot Logic ---
-        function toggleChat() {
-            const chat = document.getElementById('chat-window');
-            if (chat.classList.contains('hidden')) {
-                chat.classList.remove('hidden');
-                setTimeout(() => {
-                    chat.classList.remove('scale-95', 'opacity-0');
-                    chat.classList.add('scale-100', 'opacity-100');
-                }, 10);
-            } else {
-                chat.classList.remove('scale-100', 'opacity-100');
-                chat.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => chat.classList.add('hidden'), 300);
-            }
-        }
-
-        function handleChatInput(event) {
-            if (event.key === 'Enter') {
-                sendChatMessage();
-            }
-        }
-
-        function sendChatMessage() {
-            const input = document.getElementById('chat-input');
-            const message = input.value.trim();
-            if (message) {
-                const messagesContainer = document.getElementById('chat-messages');
-                
-                // User Message
-                const userMsgHTML = `
-                    <div class="flex justify-end">
-                        <div class="bg-blue-600 text-white p-3 rounded-tl-xl rounded-bl-xl rounded-br-xl shadow-sm text-sm max-w-[85%]">
-                            ${message}
-                        </div>
-                    </div>
-                `;
-                messagesContainer.insertAdjacentHTML('beforeend', userMsgHTML);
-                input.value = '';
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-                // Bot Response (Simulated Delay)
-                setTimeout(() => {
-                    const responseText = getBotResponse(message);
-                    const botMsgHTML = `
-                        <div class="flex justify-start">
-                            <div class="bg-white border border-slate-200 text-slate-700 p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm text-sm max-w-[85%] leading-relaxed">
-                                ${responseText}
-                            </div>
-                        </div>
-                    `;
-                    messagesContainer.insertAdjacentHTML('beforeend', botMsgHTML);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }, 800);
-            }
-        }
-
-        // Intelligent Response Logic based on Persona
-        function getBotResponse(input) {
-            input = input.toLowerCase();
-
-            // 1. Greetings
-            if (input.match(/(hello|hi|hey|salam|marhaba|مرحبا|هلا|السلام|alikum)/)) {
-                return "أهلاً بك! 👋 أنا المساعد الافتراضي لشركة SB Electro. نحن نقدم خدمات كهروميكانيكية موثوقة وعالية الجودة للعملاء السكنيين والتجاريين في دبي. كيف يمكنني مساعدتك اليوم؟";
-            }
-
-            // 2. Services (Detailed Matching)
-            if (input.match(/(services|what do you do|work|offer|خدمات|ماذا تقدمون|شغل)/) && !input.match(/(price|cost|book)/)) {
-                return "نقدم مجموعة واسعة من الخدمات تشمل:<br>🔹 <b>تكييف الهواء:</b> تركيب، صيانة، وتنظيف الدكت.<br>🔹 <b>السباكة:</b> إصلاح الأنابيب، الحنفيات، السخانات، ومعالجة التسربات.<br>🔹 <b>الكهرباء:</b> تركيب وصيانة الإضاءة، المقابس، ولوحات التوزيع.<br>🔹 <b>الصيانة السنوية (AMC):</b> عقود صيانة شاملة.<br>🔹 <b>أخرى:</b> دهانات، إيبوكسي، تنظيف عميق، مكافحة حشرات، صيانة مسابح، وعزل مائي.<br><br>هل تود معرفة المزيد عن خدمة محددة؟";
-            }
-
-            // 3. Specific Services
-            if (input.match(/(ac|air|cool|condition|تكييف|مكيف|تبريد)/)) {
-                return "❄️ <b>خدمات التكييف والدكت:</b><br>نقوم بتركيب وصيانة وحدات التكييف وتنظيف الدكت لضمان كفاءة التبريد وجودة الهواء. نقوم أيضاً بتعبئة الغاز وحل مشاكل التبريد.";
-            }
-            if (input.match(/(plumb|pipe|leak|water|drain|heater|سباكة|مواسير|تسريب|ماء|سخان)/)) {
-                return "💧 <b>أعمال السباكة:</b><br>نصلح ونركب الأنابيب، الحنفيات، الخلاطات، وسخانات المياه. نعالج أيضاً تسربات المياه وانسداد المصارف في المطابخ والحمامات.";
-            }
-            if (input.match(/(electric|power|light|socket|switch|short|كهرباء|اضاءة|إضاءة|مقبس|قاطع)/)) {
-                return "⚡ <b>الأعمال الكهربائية:</b><br>نقوم بصيانة وتركيب الأنظمة الكهربائية، الإضاءة، المقابس، ولوحات التوزيع. نضمن سلامة وموثوقية التمديدات الكهربائية.";
-            }
-            if (input.match(/(clean|maid|تنظيف|نظافة)/)) {
-                return "🧹 <b>خدمات التنظيف:</b><br>نقدم تنظيفاً عاماً وعميقاً للمنازل والمكاتب، بما في ذلك خدمات الانتقال (Move in/out). يشمل تنظيف الغرف، المطابخ، والحمامات.";
-            }
-            if (input.match(/(pest|insect|cockroach|ant|حشرات|صراصير|نمل|مكافحة)/)) {
-                return "🐜 <b>مكافحة الحشرات:</b><br>نعالج الشقق والفلل والمساحات التجارية ضد الحشرات والآفات. ملاحظة: قد تتطلب الأسعار الدقيقة زيارة للموقع.";
-            }
-            if (input.match(/(paint|wall|colour|color|دهان|صباغة|بوية|لون)/) && !input.match(/(epoxy|floor)/)) {
-                return "🎨 <b>أعمال الدهانات:</b><br>دهانات داخلية وخارجية للجدران والأسقف. نقوم بأعمال اللمسات الأخيرة، إعادة الطلاء الكامل، وتجديد الألوان للمنازل والمكاتب.";
-            }
-            if (input.match(/(epoxy|floor|garage|إيبوكسي|ارضيات|كراج)/)) {
-                return "🛡️ <b>دهانات الإيبوكسي:</b><br>طلاء متين للأرضيات في الكراجات والمستودعات. يحسن المظهر، يوفر الحماية، ويسهل التنظيف.";
-            }
-            if (input.match(/(pool|swim|مسبح|سباحة)/)) {
-                return "🏊 <b>صيانة المسابح:</b><br>تنظيف منتظم، فحص جودة المياه، موازنة المواد الكيميائية، وفحص المعدات لضمان مسبح نظيف وآمن.";
-            }
-            if (input.match(/(waterproof|leak|roof|عزل|مائي|سقف)/)) {
-                return "🏠 <b>العزل المائي:</b><br>حلول للأسطح، الحمامات، والشرفات لمنع تسرب المياه والرطوبة.";
-            }
-            if (input.match(/(handyman|fix|repair|carpentry|door|نجار|اصلاح|تصليح|باب)/)) {
-                return "🔧 <b>خدمات الهاندي مان:</b><br>إصلاحات عامة مثل تصليح الأبواب، النجارة البسيطة، تركيب الستائر والتلفزيون، وغيرها من الأعمال الصغيرة.";
-            }
-            if (input.match(/(amc|contract|annual|package|عقد|سنوي|باقة)/)) {
-                return "📅 <b>عقود الصيانة السنوية (AMC):</b><br>باقات صيانة مجدولة على مدار العام للتكييف، الكهرباء، والسباكة. مثالية للفلل والمكاتب لمنع الأعطال المفاجئة.";
-            }
-
-            // 4. Pricing
-            if (input.match(/(price|cost|much|rate|fee|money|سعر|تكلفة|كم|فلوس|بكام)/)) {
-                return "💰 تعتمد الأسعار على حجم العقار، طبيعة المشكلة، والموقع. للحصول على عرض سعر دقيق، نقترح مشاركة التفاصيل أو طلب زيارة للموقع. هل تود حجز موعد للمعاينة؟";
-            }
-
-            // 5. Booking / Quote
-            if (input.match(/(book|quote|appoint|schedule|visit|need|want|help|حجز|موعد|زيارة|أريد|أحتاج|عرض|مساعدة)/)) {
-                return "📝 <b>لحجز خدمة أو طلب عرض سعر:</b><br>يرجى تزويدنا بالتفاصيل التالية:<br>1. الاسم الكامل<br>2. رقم الهاتف / واتساب<br>3. الموقع في دبي<br>4. الخدمة المطلوبة ووصف بسيط للمشكلة<br>5. الموعد المفضل<br><br>سيقوم فريق SB Electro بالتواصل معك قريباً لتأكيد التفاصيل.";
-            }
-
-            // 6. Contact / Location
-            if (input.match(/(contact|phone|number|email|call|location|where|address|اتصال|تليفون|رقم|ايميل|موقع|عنوان|وين)/)) {
-                return "📍 <b>موقعنا:</b> دبي، الإمارات العربية المتحدة.<br>📞 <b>الهاتف:</b> +971 56 909 8867<br>📧 <b>البريد:</b> sevenbrotherelectromechanical@gmail.com";
-            }
-
-            // 7. Thank you / Closing
-            if (input.match(/(thank|thanks|shukran|شكرا|يسلمو)/)) {
-                return "العفو! نحن هنا دائماً لخدمتك. لا تتردد في التواصل معنا لأي استفسار آخر. 🛠️";
-            }
-
-            // 8. Fallback (Outside Scope)
-            return "عذراً، لم أفهم تماماً. هل تسأل عن خدمة صيانة معينة؟<br>نحن متخصصون في التكييف، السباكة، الكهرباء، والتنظيف في دبي.<br>يمكنك أيضاً الاتصال بنا مباشرة على <b>+971 56 909 8867</b> للمساعدة الفورية.";
-        }
-
-
         function init() {
             const homeGrid = document.getElementById('home-services-grid');
             if(homeGrid) homeGrid.innerHTML = SERVICES.slice(0, 6).map(renderServiceCard).join('');
@@ -1107,6 +1209,29 @@
 
             lucide.createIcons();
             startHeroSlider();
+        }
+
+        // Hero Image Slider Logic
+        const heroImages = [
+            "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1647381518264-97ff1835026f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        ];
+        let currentHeroImage = 0;
+
+        function startHeroSlider() {
+            setInterval(() => {
+                currentHeroImage = (currentHeroImage + 1) % heroImages.length;
+                const img = document.getElementById('hero-slider-img');
+                if(img) {
+                    img.style.opacity = '0'; // Fade out
+                    setTimeout(() => {
+                        img.src = heroImages[currentHeroImage];
+                        img.onload = () => { img.style.opacity = '1'; }; // Fade in on load
+                    }, 300); 
+                }
+            }, 2000); // Change every 2 seconds
         }
 
         function navigateTo(pageId) {
@@ -1259,6 +1384,297 @@
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
+        }
+
+        // --- AI Advisor Logic (Interactive Tool) ---
+        
+        async function analyzeProblem() {
+            const input = document.getElementById('ai-problem-input').value.trim();
+            const resultContainer = document.getElementById('ai-result-content');
+            const initialState = document.getElementById('ai-initial-state');
+            const loadingState = document.getElementById('ai-loading-state');
+            
+            if (!input) {
+                alert("يرجى وصف المشكلة أولاً");
+                return;
+            }
+
+            // UI Transitions
+            initialState.classList.add('hidden');
+            resultContainer.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+
+            try {
+                // Call Gemini API
+                const data = await callGeminiAPI(input);
+                
+                // Parse JSON response
+                let analysis;
+                try {
+                    // Clean code blocks if present
+                    const cleanJson = data.replace(/```json/g, '').replace(/```/g, '').trim();
+                    analysis = JSON.parse(cleanJson);
+                } catch (e) {
+                    console.error("JSON Parse Error", e);
+                    // Fallback object
+                    analysis = {
+                        category: "صيانة عامة",
+                        urgency: "غير محدد",
+                        diagnosis: "يرجى التواصل مع الفني للمعاينة المباشرة.",
+                        safety_tip: "افصل التيار الكهربائي إذا كنت تشك بوجود خطر."
+                    };
+                }
+
+                // Update UI
+                document.getElementById('ai-category').textContent = "التصنيف: " + analysis.category;
+                document.getElementById('ai-diagnosis').textContent = analysis.diagnosis;
+                document.getElementById('ai-safety').textContent = analysis.safety_tip;
+                
+                const urgencyBadge = document.getElementById('ai-urgency-badge');
+                if (analysis.urgency === 'High' || analysis.urgency === 'عالية') {
+                    urgencyBadge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-100 text-red-600";
+                    urgencyBadge.textContent = "عاجل جداً";
+                } else if (analysis.urgency === 'Medium' || analysis.urgency === 'متوسطة') {
+                    urgencyBadge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-600";
+                    urgencyBadge.textContent = "متوسطة";
+                } else {
+                    urgencyBadge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-green-100 text-green-600";
+                    urgencyBadge.textContent = "عادية";
+                }
+
+                loadingState.classList.add('hidden');
+                resultContainer.classList.remove('hidden');
+
+            } catch (error) {
+                console.error(error);
+                loadingState.classList.add('hidden');
+                initialState.classList.remove('hidden');
+                alert("عذراً، حدث خطأ أثناء التحليل. حاول مرة أخرى.");
+            }
+        }
+
+        async function callGeminiAPI(userMessage) {
+            if (!apiKey) {
+                await new Promise(r => setTimeout(r, 2000));
+                
+                // Smart Mock Logic for Advisor
+                const lowerMsg = userMessage.toLowerCase();
+                let category = "صيانة عامة";
+                let diagnosis = "يرجى معاينة المشكلة من قبل فني مختص.";
+                let safety = "توخى الحذر ولا تقم بالإصلاح بنفسك.";
+                let urgency = "Medium";
+
+                if (lowerMsg.match(/(تكييف|مكيف|حار|تبريد)/)) {
+                    category = "تكييف الهواء";
+                    diagnosis = "احتمال وجود نقص في الغاز أو اتساخ في الفلاتر/الدكت.";
+                    safety = "أوقف تشغيل المكيف لتجنب تلف الضاغط.";
+                    urgency = "Medium";
+                } else if (lowerMsg.match(/(كهرباء|شرار|ريحة|حريق|طافي)/)) {
+                    category = "الكهرباء";
+                    diagnosis = "احتمال وجود ماس كهربائي أو حمل زائد على القاطع.";
+                    safety = "افصل التيار الكهربائي من اللوحة الرئيسية فوراً.";
+                    urgency = "High";
+                } else if (lowerMsg.match(/(ماء|تسريب|يخر|غرق)/)) {
+                    category = "السباكة";
+                    diagnosis = "تلف في الأنابيب أو وصلات المياه.";
+                    safety = "أغلق محبس المياه الرئيسي لمنع الأضرار.";
+                    urgency = "High";
+                }
+
+                return JSON.stringify({
+                    category: category,
+                    urgency: urgency,
+                    diagnosis: diagnosis,
+                    safety_tip: safety
+                });
+            }
+
+            const systemPrompt = `
+                You are an expert technical consultant for SB Electro (UAE). Analyze the user's maintenance problem description in Arabic.
+                Output ONLY a JSON object with this structure:
+                {
+                    "category": "Service Category (e.g., AC, Plumbing, Electrical)",
+                    "urgency": "High/Medium/Low",
+                    "diagnosis": "A short technical explanation of what might be wrong (in Arabic)",
+                    "safety_tip": "One immediate safety action the user should take (in Arabic)"
+                }
+            `;
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: userMessage }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: { responseMimeType: "application/json" }
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error('API Error');
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        // --- Chat Bot Logic ---
+        function toggleChat() {
+            const chat = document.getElementById('chat-window');
+            if (chat.classList.contains('hidden')) {
+                chat.classList.remove('hidden');
+                setTimeout(() => {
+                    chat.classList.remove('scale-95', 'opacity-0');
+                    chat.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            } else {
+                chat.classList.remove('scale-100', 'opacity-100');
+                chat.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => chat.classList.add('hidden'), 300);
+            }
+        }
+
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (message) {
+                const messagesContainer = document.getElementById('chat-messages');
+                
+                // User Message
+                const userMsgHTML = `
+                    <div class="flex justify-end">
+                        <div class="bg-blue-600 text-white p-3 rounded-tl-xl rounded-bl-xl rounded-br-xl shadow-sm text-sm max-w-[85%]">
+                            ${message}
+                        </div>
+                    </div>
+                `;
+                messagesContainer.insertAdjacentHTML('beforeend', userMsgHTML);
+                input.value = '';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // Bot Response (Loading)
+                const loadingId = 'loading-' + Date.now();
+                const loadingHTML = `
+                    <div id="${loadingId}" class="flex justify-start">
+                        <div class="bg-white border border-slate-200 text-slate-700 p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm text-sm max-w-[85%]">
+                            <div class="flex gap-1">
+                                <span class="typing-dot"></span>
+                                <span class="typing-dot"></span>
+                                <span class="typing-dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                messagesContainer.insertAdjacentHTML('beforeend', loadingHTML);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // Call Gemini for Chat
+                callGeminiChat(message).then(responseText => {
+                    const loadingEl = document.getElementById(loadingId);
+                    if (loadingEl) loadingEl.remove();
+
+                    const botMsgHTML = `
+                        <div class="flex justify-start">
+                            <div class="bg-white border border-slate-200 text-slate-700 p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm text-sm max-w-[85%] leading-relaxed">
+                                ${marked.parse(responseText)}
+                            </div>
+                        </div>
+                    `;
+                    messagesContainer.insertAdjacentHTML('beforeend', botMsgHTML);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }).catch(err => {
+                    const loadingEl = document.getElementById(loadingId);
+                    if (loadingEl) loadingEl.remove();
+                    
+                    const errorHTML = `
+                        <div class="flex justify-start">
+                            <div class="bg-red-50 border border-red-100 text-red-600 p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm text-sm max-w-[85%]">
+                                عذراً، حدث خطأ في الاتصال. يرجى المحاولة لاحقاً.
+                            </div>
+                        </div>
+                    `;
+                    messagesContainer.insertAdjacentHTML('beforeend', errorHTML);
+                });
+            }
+        }
+
+        async function callGeminiChat(userMessage) {
+            if (!apiKey) {
+                // Return a mock answer after delay
+                await new Promise(r => setTimeout(r, 1000));
+                
+                const lowerMsg = userMessage.toLowerCase();
+                
+                // Enhanced Offline Logic
+                if (lowerMsg.match(/(مرحبا|هلا|السلام|hi|hello|hey)/)) {
+                    return "أهلاً بك في SB Electro! 🛠️\nكيف يمكنني مساعدتك اليوم في خدمات الصيانة؟";
+                }
+                
+                if (lowerMsg.match(/(تكييف|مكيف|تبريد|حار|ac|cool)/)) {
+                    return "نقدم خدمات متكاملة للتكييف تشمل:\n❄️ صيانة وقائية\n❄️ تنظيف الدكت\n❄️ تعبئة غاز\n❄️ إصلاح الكمبروسر\n\nهل تود حجز موعد للصيانة؟";
+                }
+                
+                if (lowerMsg.match(/(كهرباء|لمبة|فيش|قاطع|electric|power|light)/)) {
+                    return "فريقنا الكهربائي جاهز للمساعدة في:\n⚡ تمديد الأسلاك\n⚡ تركيب الإضاءة والمقابس\n⚡ إصلاح الأعطال وانقطاع التيار\n\nنضمن لك أعلى معايير السلامة.";
+                }
+                
+                if (lowerMsg.match(/(سباكة|ماء|تسريب|مواسير|plumb|water|leak)/)) {
+                    return "خدمات السباكة لدينا تشمل:\n💧 كشف التسربات\n💧 تركيب وإصلاح الأنابيب\n💧 صيانة السخانات والمضخات\n\nهل المشكلة طارئة؟";
+                }
+                
+                if (lowerMsg.match(/(دهان|صباغة|لون|جدار|paint)/)) {
+                    return "نقدم خدمات صباغة احترافية:\n🎨 دهانات داخلية وخارجية\n🎨 معالجة الشقوق والرطوبة\n🎨 دهانات ديكورية\n\nيمكننا إرسال كتالوج الألوان إليك.";
+                }
+
+                if (lowerMsg.match(/(سعر|تكلفة|بكم|فلوس|price|cost)/)) {
+                    return "تعتمد التكلفة على نوع الخدمة وحجم العمل. 💰\nننصح بحجز **معاينة مجانية** لتقديم عرض سعر دقيق.\nيمكنك الاتصال بنا على 0544146567.";
+                }
+                
+                if (lowerMsg.match(/(موقع|عنوان|وين|location|address)/)) {
+                    return "مقرنا في **أبوظبي، الإمارات**.\nونخدم جميع المناطق المجاورة. 📍";
+                }
+                
+                if (lowerMsg.match(/(رقم|تليفون|اتصال|contact|phone)/)) {
+                    return "يمكنك التواصل معنا مباشرة عبر:\n📞 الهاتف: 0544146567\n📧 البريد: sevenbrotherelectromechanical@gmail.com";
+                }
+
+                // Default Fallback
+                return "شكراً لتواصلك معنا. نحن متخصصون في جميع أعمال الصيانة (تكييف، كهرباء، سباكة، دهانات). يرجى وصف مشكلتك وسنقوم بمساعدتك، أو يمكنك الاتصال بنا مباشرة.";
+            }
+
+            const systemPrompt = `
+                You are a helpful customer service agent for SB Electro (UAE). 
+                Your goal is to assist users with their inquiries about maintenance services (AC, Plumbing, Electrical, etc.).
+                Rules:
+                1. Always reply in professional Arabic.
+                2. Keep answers concise and helpful.
+                3. If asked about prices, give general info but suggest a site visit for accurate quotes.
+                4. Be polite and engaging.
+            `;
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: userMessage }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error('API Error');
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
         }
 
         window.addEventListener('DOMContentLoaded', init);
