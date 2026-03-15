@@ -4,299 +4,286 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سفن برذرز إلكترو - خدمات فنية في الإمارات</title>
-
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
+    
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 
     <!-- Markdown Parser -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        navy: { DEFAULT: '#0a1628', light: '#111d35' },
-                        royal: { DEFAULT: '#1e56a0', light: '#2b6cb0' },
-                        electric: '#3b82f6',
-                        gold: { DEFAULT: '#d4a84b', light: '#f0c75e' }
-                    },
-                    fontFamily: {
-                        tajawal: ['Tajawal', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+    
+    
 </head>
-<body class="font-tajawal bg-white text-slate-800 flex flex-col min-h-screen">
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
 
-    <!-- ========================================
-         TOP BAR
-         ======================================== -->
-    <div class="bg-navy text-slate-400 py-2 text-xs hidden md:block border-b border-white/5">
+    <!-- Top Bar -->
+    <div class="bg-slate-900 text-slate-300 py-2.5 text-xs md:text-sm hidden md:block border-b border-slate-800">
         <div class="container mx-auto px-6 flex justify-between items-center">
-            <div class="flex gap-8 items-center">
-                <span class="flex items-center gap-2">
-                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gold"></i> أبوظبي، الإمارات
+            <div class="flex gap-6">
+                <span class="flex items-center gap-2 hover:text-white transition cursor-default">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-brand-accent"></i> أبوظبي، الإمارات
                 </span>
                 <a href="mailto:sevenbrotherelectromechanical@gmail.com" class="flex items-center gap-2 hover:text-white transition">
-                    <i data-lucide="mail" class="w-3.5 h-3.5 text-gold"></i> sevenbrotherelectromechanical@gmail.com
+                    <i data-lucide="mail" class="w-3.5 h-3.5 text-brand-accent"></i> sevenbrotherelectromechanical@gmail.com
                 </a>
             </div>
-            <div class="flex items-center gap-3">
-                <span class="text-slate-500">تحتاج مساعدة؟</span>
-                <a href="tel:+971569098867" class="font-bold text-gold hover:text-gold-light transition" dir="ltr">+971 56 909 8867</a>
+            <div class="flex items-center gap-2">
+                <span class="font-medium text-slate-400">تحتاج مساعدة؟</span> 
+                <a href="tel:+971569098867" class="font-bold text-white hover:text-brand-accent transition" dir="ltr">+971 56 909 8867</a>
             </div>
         </div>
     </div>
 
-    <!-- ========================================
-         NAVIGATION
-         ======================================== -->
-    <nav class="main-nav sticky top-0 z-40 bg-white/80 border-b border-slate-100/50">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100 transition-all duration-300">
         <div class="container mx-auto px-6 py-3">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
-                <div onclick="navigateTo('home')" class="group flex items-center gap-3 cursor-pointer select-none">
-                    <div class="w-11 h-11 bg-gradient-to-br from-royal to-royal-light text-white flex items-center justify-center rounded-xl shadow-lg shadow-royal/20 group-hover:scale-105 transition-transform">
+                <div onclick="navigateTo('home')" class="group flex items-center gap-2 cursor-pointer select-none">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 text-white flex items-center justify-center rounded-xl shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
                         <i data-lucide="zap" class="w-6 h-6 fill-current"></i>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-xl font-black text-navy leading-none tracking-tight" dir="ltr">SB <span class="text-royal">Electro</span></span>
-                        <span class="text-[9px] text-slate-400 font-semibold tracking-widest uppercase">Technical Services</span>
+                        <span class="text-2xl font-extrabold text-slate-900 leading-none tracking-tight" dir="ltr">SB <span class="text-blue-600">Electro</span></span>
+                        <span class="text-[10px] text-slate-500 font-medium tracking-wide">للخدمات الفنية والصيانة</span>
                     </div>
                 </div>
 
                 <!-- Desktop Links -->
-                <div class="hidden lg:flex items-center gap-7">
-                    <button onclick="navigateTo('home')" class="nav-link text-slate-600 hover:text-royal transition-colors" data-page="home">الرئيسية</button>
-                    <button onclick="navigateTo('about')" class="nav-link text-slate-600 hover:text-royal transition-colors" data-page="about">من نحن</button>
-                    <button onclick="navigateTo('services')" class="nav-link text-slate-600 hover:text-royal transition-colors" data-page="services">خدماتنا</button>
-                    <button onclick="navigateTo('ai-advisor')" class="nav-link text-purple-600 hover:text-purple-800 font-bold transition-colors flex items-center gap-1.5" data-page="ai-advisor">
+                <div class="hidden md:flex items-center gap-8">
+                    <button onclick="navigateTo('home')" class="nav-link text-slate-600 hover:text-blue-600 font-medium transition-colors py-2" data-page="home">الرئيسية</button>
+                    <button onclick="navigateTo('about')" class="nav-link text-slate-600 hover:text-blue-600 font-medium transition-colors py-2" data-page="about">من نحن</button>
+                    <button onclick="navigateTo('services')" class="nav-link text-slate-600 hover:text-blue-600 font-medium transition-colors py-2" data-page="services">خدماتنا</button>
+                    <!-- New AI Feature Link -->
+                    <button onclick="navigateTo('ai-advisor')" class="nav-link text-indigo-600 hover:text-indigo-800 font-bold transition-colors py-2 flex items-center gap-1">
                         <i data-lucide="sparkles" class="w-4 h-4"></i> المستشار الذكي
                     </button>
-                    <button onclick="navigateTo('projects')" class="nav-link text-slate-600 hover:text-royal transition-colors" data-page="projects">مشاريعنا</button>
-                    <button onclick="navigateTo('faq')" class="nav-link text-slate-600 hover:text-royal transition-colors" data-page="faq">الأسئلة</button>
+                    <button onclick="navigateTo('projects')" class="nav-link text-slate-600 hover:text-blue-600 font-medium transition-colors py-2" data-page="projects">مشاريعنا</button>
+                    <button onclick="navigateTo('faq')" class="nav-link text-slate-600 hover:text-blue-600 font-medium transition-colors py-2" data-page="faq">الأسئلة الشائعة</button>
                 </div>
 
-                <!-- CTA & Mobile -->
-                <div class="flex items-center gap-3">
-                    <button onclick="navigateTo('contact')" class="hidden lg:flex btn-primary text-sm py-2.5 px-5">
-                        <i data-lucide="phone-call" class="w-4 h-4"></i>
+                <!-- CTA & Mobile Toggle -->
+                <div class="flex items-center gap-4">
+                    <button onclick="navigateTo('contact')" class="hidden md:flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
                         <span>اتصل بنا</span>
+                        <i data-lucide="phone-call" class="w-4 h-4"></i>
                     </button>
-                    <button class="lg:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-xl transition" onclick="toggleMobileMenu()">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    
+                    <button class="md:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors" onclick="toggleMobileMenu()">
+                        <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
                     </button>
                 </div>
             </div>
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-slate-100 absolute w-full shadow-2xl mobile-menu-enter z-50">
-            <div class="flex flex-col p-5 space-y-1">
-                <button onclick="navigateTo('home')" class="text-right font-medium p-3.5 rounded-xl hover:bg-slate-50 text-slate-600 transition flex justify-between items-center">الرئيسية <i data-lucide="chevron-left" class="w-4 h-4 opacity-30"></i></button>
-                <button onclick="navigateTo('about')" class="text-right font-medium p-3.5 rounded-xl hover:bg-slate-50 text-slate-600 transition flex justify-between items-center">من نحن <i data-lucide="chevron-left" class="w-4 h-4 opacity-30"></i></button>
-                <button onclick="navigateTo('services')" class="text-right font-medium p-3.5 rounded-xl hover:bg-slate-50 text-slate-600 transition flex justify-between items-center">خدماتنا <i data-lucide="chevron-left" class="w-4 h-4 opacity-30"></i></button>
-                <button onclick="navigateTo('ai-advisor')" class="text-right font-bold p-3.5 rounded-xl bg-purple-50 text-purple-600 transition flex justify-between items-center">المستشار الذكي <i data-lucide="sparkles" class="w-4 h-4"></i></button>
-                <button onclick="navigateTo('projects')" class="text-right font-medium p-3.5 rounded-xl hover:bg-slate-50 text-slate-600 transition flex justify-between items-center">مشاريعنا <i data-lucide="chevron-left" class="w-4 h-4 opacity-30"></i></button>
-                <button onclick="navigateTo('faq')" class="text-right font-medium p-3.5 rounded-xl hover:bg-slate-50 text-slate-600 transition flex justify-between items-center">الأسئلة الشائعة <i data-lucide="chevron-left" class="w-4 h-4 opacity-30"></i></button>
-                <div class="pt-3">
-                    <button onclick="navigateTo('contact')" class="w-full btn-primary py-3.5">
-                        <i data-lucide="phone" class="w-4 h-4"></i> اتصل بنا
-                    </button>
-                </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 absolute w-full shadow-xl animate-slide-down">
+            <div class="flex flex-col p-4 space-y-2">
+                <button onclick="navigateTo('home')" class="text-right font-medium p-3 rounded-lg hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors flex justify-between items-center">
+                    الرئيسية <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
+                </button>
+                <button onclick="navigateTo('ai-advisor')" class="text-right font-bold p-3 rounded-lg bg-indigo-50 text-indigo-600 hover:text-indigo-800 transition-colors flex justify-between items-center">
+                    المستشار الذكي ✨ <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
+                </button>
+                <button onclick="navigateTo('about')" class="text-right font-medium p-3 rounded-lg hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors flex justify-between items-center">
+                    من نحن <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
+                </button>
+                <button onclick="navigateTo('services')" class="text-right font-medium p-3 rounded-lg hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors flex justify-between items-center">
+                    خدماتنا <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
+                </button>
+                <button onclick="navigateTo('projects')" class="text-right font-medium p-3 rounded-lg hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors flex justify-between items-center">
+                    مشاريعنا <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
+                </button>
+                <button onclick="navigateTo('contact')" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold shadow-md mt-4 flex justify-center items-center gap-2">
+                    <i data-lucide="phone" class="w-4 h-4"></i> اتصل بنا
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- ========================================
-         MAIN CONTENT
-         ======================================== -->
-    <main class="flex-grow">
-
-        <!-- ====== HOME PAGE ====== -->
+    <!-- Main Content Area -->
+    <main class="flex-grow bg-white">
+        
+        <!-- HOME PAGE -->
         <div id="home" class="page-section animate-fade-in">
-
-            <!-- HERO SECTION -->
-            <section class="hero-section">
-                <!-- BG Image -->
-                <div class="absolute inset-0">
-                    <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=1920" class="w-full h-full object-cover" alt="">
-                </div>
-                <div class="hero-bg-overlay"></div>
-
-                <!-- Particles -->
-                <div class="hero-particles">
-                    <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
-                    <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
-                </div>
-
-                <!-- Content -->
-                <div class="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-16 items-center py-20">
-
-                    <!-- Text -->
-                    <div class="text-right text-white space-y-8 order-2 lg:order-1">
-                        <div class="hero-badge">
-                            <span class="w-2 h-2 rounded-full bg-green-400 pulse-dot"></span>
+            
+            <!-- Modern Hero Section -->
+            <div class="relative bg-slate-900 overflow-hidden min-h-[650px] flex items-center">
+                <!-- Background Elements -->
+                <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 opacity-90"></div>
+                <div class="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                
+                <!-- Content Container -->
+                <div class="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center pt-10 pb-20">
+                    
+                    <!-- Right: Text Content -->
+                    <div class="text-right text-white space-y-6 order-2 lg:order-1">
+                        <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 rounded-full px-4 py-1.5 text-blue-200 text-sm font-medium mb-2 backdrop-blur-sm">
+                            <span class="relative flex h-2.5 w-2.5">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                            </span>
                             متاحون 24/7 لخدمتكم
                         </div>
-
-                        <h1 class="hero-title">
+                        
+                        <h1 class="text-5xl lg:text-7xl font-extrabold leading-tight">
                             حلول صيانة <br/>
-                            <span class="highlight">ذكية ومتكاملة</span>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-l from-blue-400 to-cyan-300">ذكية ومتكاملة</span>
                         </h1>
-
-                        <p class="text-lg text-slate-300 max-w-lg leading-relaxed">
+                        
+                        <p class="text-xl text-slate-300 max-w-xl leading-relaxed">
                             نقدم خدمات كهروميكانيكية احترافية لمنزلك ومكتبك في الإمارات. جودة عالية، أسعار تنافسية، وضمان شامل على جميع الأعمال.
                         </p>
-
-                        <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                            <button onclick="navigateTo('ai-advisor')" class="btn-gold text-base py-4 px-8">
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                            <button onclick="navigateTo('ai-advisor')" class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
                                 <i data-lucide="sparkles" class="w-5 h-5"></i>
                                 تشخيص الأعطال بالذكاء الاصطناعي
                             </button>
-                            <button onclick="navigateTo('services')" class="btn-outline text-base py-4 px-8">
+                            <button onclick="navigateTo('services')" class="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold backdrop-blur-sm transition-all flex items-center justify-center gap-2">
                                 استكشف خدماتنا <i data-lucide="arrow-left" class="w-5 h-5"></i>
                             </button>
                         </div>
 
-                        <div class="flex items-center gap-0 pt-6 border-t border-white/10 mt-4">
-                            <div class="hero-stat">
-                                <div class="hero-stat-number counter-value" data-target="500">0</div>
-                                <div class="hero-stat-label">مشروع ناجح</div>
+                        <div class="flex items-center gap-8 pt-8 border-t border-white/10 mt-8">
+                            <div>
+                                <p class="text-3xl font-bold text-white">500+</p>
+                                <p class="text-sm text-slate-400">مشروع ناجح</p>
                             </div>
-                            <div class="hero-stat">
-                                <div class="hero-stat-number">100%</div>
-                                <div class="hero-stat-label">ضمان الجودة</div>
+                            <div>
+                                <p class="text-3xl font-bold text-white">100%</p>
+                                <p class="text-sm text-slate-400">ضمان الجودة</p>
                             </div>
-                            <div class="hero-stat">
-                                <div class="hero-stat-number">24/7</div>
-                                <div class="hero-stat-label">دعم فني</div>
+                            <div>
+                                <p class="text-3xl font-bold text-white">24/7</p>
+                                <p class="text-sm text-slate-400">دعم فني</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Image -->
-                    <div class="hero-image-wrapper relative order-1 lg:order-2 hidden lg:block">
-                        <div class="hero-image-frame mx-auto max-w-[380px]">
-                            <img id="hero-slider-img" src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=600" alt="فني محترف">
-                        </div>
-
-                        <!-- Floating Cards -->
-                        <div class="hero-floating-card float-animation absolute -right-6 top-16">
-                            <div class="icon-box bg-blue-50 text-royal"><i data-lucide="wind" class="w-5 h-5"></i></div>
-                            <div>
-                                <p class="font-bold text-sm text-slate-800">صيانة تكييف</p>
-                                <p class="text-xs text-slate-500">تبريد مثالي</p>
+                    <!-- Left: Visuals -->
+                    <div class="relative order-1 lg:order-2 hidden lg:block">
+                        <!-- Blob Background -->
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-blue-600 to-cyan-500 opacity-30 blob-shape blur-3xl"></div>
+                        
+                        <!-- Main Image Slider -->
+                        <div class="relative z-10 w-96 mx-auto">
+                            <!-- Image Container -->
+                            <div class="rounded-3xl shadow-2xl border-4 border-white/10 overflow-hidden relative aspect-[4/5] transform rotate-3 hover:rotate-0 transition duration-500 bg-slate-800">
+                                <img id="hero-slider-img" src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=600" alt="Technician" class="w-full h-full object-cover transition-opacity duration-300">
                             </div>
-                        </div>
 
-                        <div class="hero-floating-card float-animation-delayed absolute -left-8 bottom-24">
-                            <div class="icon-box bg-amber-50 text-amber-600"><i data-lucide="zap" class="w-5 h-5"></i></div>
-                            <div>
-                                <p class="font-bold text-sm text-slate-800">أعمال كهربائية</p>
-                                <p class="text-xs text-slate-500">آمنة ومعتمدة</p>
+                            <!-- Floating Cards -->
+                            <div class="absolute -right-4 top-10 bg-white p-4 rounded-xl shadow-xl animate-float z-20 flex items-center gap-3 max-w-[180px]">
+                                <div class="bg-blue-100 p-2 rounded-lg text-blue-600"><i data-lucide="wind" class="w-6 h-6"></i></div>
+                                <div>
+                                    <p class="font-bold text-sm text-slate-800">صيانة تكييف</p>
+                                    <p class="text-xs text-slate-500">تبريد مثالي</p>
+                                </div>
+                            </div>
+
+                            <div class="absolute -left-8 bottom-20 bg-white p-4 rounded-xl shadow-xl animate-float-delayed z-20 flex items-center gap-3 max-w-[180px]">
+                                <div class="bg-amber-100 p-2 rounded-lg text-amber-600"><i data-lucide="zap" class="w-6 h-6"></i></div>
+                                <div>
+                                    <p class="font-bold text-sm text-slate-800">أعمال كهربائية</p>
+                                    <p class="text-xs text-slate-500">آمنة ومعتمدة</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Bottom Wave -->
-                <div class="absolute bottom-0 w-full z-10">
-                    <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
-                        <path d="M0 40L48 35C96 30 192 20 288 25C384 30 480 50 576 55C672 60 768 50 864 40C960 30 1056 20 1152 22.5C1248 25 1344 40 1392 47.5L1440 55V80H1392C1344 80 1248 80 1152 80C1056 80 960 80 864 80C768 80 672 80 576 80C480 80 384 80 288 80C192 80 96 80 48 80H0V40Z" fill="white"/>
+                <!-- Wave Separator -->
+                <div class="absolute bottom-0 w-full overflow-hidden leading-none">
+                    <svg class="relative block w-[calc(100%+1.3px)] h-[50px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-white"></path>
                     </svg>
                 </div>
-            </section>
+            </div>
 
-            <!-- TRUST STRIP -->
-            <section class="py-20 bg-white">
-                <div class="container mx-auto px-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="feature-card reveal">
-                            <div class="feature-icon bg-blue-50 text-royal">
-                                <i data-lucide="shield-check" class="w-7 h-7"></i>
-                            </div>
-                            <h3 class="font-bold text-xl text-slate-900 mb-3">مرخصون ومؤمنون</h3>
-                            <p class="text-slate-500 leading-relaxed">خدماتنا معتمدة رسمياً ونلتزم بأعلى معايير السلامة والأمان.</p>
+            <!-- Features Strip -->
+            <div class="bg-white py-16">
+                <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="group p-6 rounded-2xl border border-slate-100 hover:border-blue-100 hover:shadow-xl transition-all duration-300">
+                        <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <i data-lucide="shield-check" class="w-8 h-8"></i>
                         </div>
-                        <div class="feature-card reveal reveal-delay-1">
-                            <div class="feature-icon bg-amber-50 text-gold">
-                                <i data-lucide="clock" class="w-7 h-7"></i>
-                            </div>
-                            <h3 class="font-bold text-xl text-slate-900 mb-3">التزام بالمواعيد</h3>
-                            <p class="text-slate-500 leading-relaxed">نقدر وقتك، لذا نضمن وصول الفريق الفني في الموعد المحدد.</p>
+                        <h3 class="font-bold text-xl text-slate-900 mb-2">مرخصون ومؤمنون</h3>
+                        <p class="text-slate-600">خدماتنا معتمدة رسمياً ونلتزم بأعلى معايير السلامة والأمان.</p>
+                    </div>
+                    <div class="group p-6 rounded-2xl border border-slate-100 hover:border-blue-100 hover:shadow-xl transition-all duration-300">
+                        <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <i data-lucide="clock" class="w-8 h-8"></i>
                         </div>
-                        <div class="feature-card reveal reveal-delay-2">
-                            <div class="feature-icon bg-green-50 text-green-600">
-                                <i data-lucide="award" class="w-7 h-7"></i>
-                            </div>
-                            <h3 class="font-bold text-xl text-slate-900 mb-3">فنيون محترفون</h3>
-                            <p class="text-slate-500 leading-relaxed">فريق مدرب ومؤهل للتعامل مع كافة الأعطال بدقة واحترافية.</p>
+                        <h3 class="font-bold text-xl text-slate-900 mb-2">التزام بالمواعيد</h3>
+                        <p class="text-slate-600">نقدر وقتك، لذا نضمن وصول الفريق الفني في الموعد المحدد.</p>
+                    </div>
+                    <div class="group p-6 rounded-2xl border border-slate-100 hover:border-blue-100 hover:shadow-xl transition-all duration-300">
+                        <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <i data-lucide="award" class="w-8 h-8"></i>
                         </div>
+                        <h3 class="font-bold text-xl text-slate-900 mb-2">فنيون محترفون</h3>
+                        <p class="text-slate-600">فريق مدرب ومؤهل للتعامل مع كافة الأعطال بدقة واحترافية.</p>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- VIDEO SECTION -->
-            <section class="video-section py-24 bg-navy relative">
-                <!-- Decorative Blurs -->
-                <div class="absolute top-0 left-0 w-80 h-80 bg-royal rounded-full mix-blend-screen filter blur-[120px] opacity-15"></div>
-                <div class="absolute bottom-0 right-0 w-80 h-80 bg-gold rounded-full mix-blend-screen filter blur-[120px] opacity-10"></div>
+            <!-- NEW VIDEO SECTION -->
+            <section class="py-20 bg-slate-900 text-white relative overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+                <!-- Blue glow effects -->
+                <div class="absolute top-0 left-0 w-64 h-64 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float"></div>
+                <div class="absolute bottom-0 right-0 w-64 h-64 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float-delayed"></div>
 
                 <div class="container mx-auto px-6 text-center relative z-10">
-                    <div class="section-badge bg-white/10 text-gold-light mb-4 mx-auto w-fit">
-                        <i data-lucide="play" class="w-3.5 h-3.5"></i> طريقة عملنا
-                    </div>
-                    <h2 class="section-title text-white mb-12">شاهد فريقنا في الميدان</h2>
-
-                    <div class="video-bg reveal">
-                        <video class="w-full" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&q=80&w=1920">
+                    <span class="text-blue-400 font-bold uppercase tracking-wider text-sm mb-4 block">طريقة عملنا</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold mb-12">شاهد فريقنا في الميدان</h2>
+                    
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 max-w-4xl mx-auto group">
+                        <!-- Pexels Video: Construction / Planning -->
+                        <video class="w-full h-full object-cover" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&q=80&w=1920">
                             <source src="https://videos.pexels.com/video-files/7578544/7578544-hd_1920_1080_30fps.mp4" type="video/mp4">
+                            متصفحك لا يدعم تشغيل الفيديو.
                         </video>
                     </div>
-
-                    <div class="mt-12 flex flex-wrap justify-center gap-10 text-slate-300">
-                        <div class="flex items-center gap-3 reveal reveal-delay-1">
-                            <div class="w-8 h-8 rounded-full bg-royal flex items-center justify-center"><i data-lucide="check" class="w-4 h-4 text-white"></i></div>
-                            <span class="font-medium">تخطيط دقيق</span>
+                    
+                    <div class="mt-10 flex flex-wrap justify-center gap-8 text-slate-300">
+                        <div class="flex items-center gap-2">
+                            <div class="bg-blue-600 p-2 rounded-full"><i data-lucide="check" class="w-4 h-4 text-white"></i></div>
+                            <span>تخطيط دقيق</span>
                         </div>
-                        <div class="flex items-center gap-3 reveal reveal-delay-2">
-                            <div class="w-8 h-8 rounded-full bg-royal flex items-center justify-center"><i data-lucide="check" class="w-4 h-4 text-white"></i></div>
-                            <span class="font-medium">تنفيذ آمن</span>
+                        <div class="flex items-center gap-2">
+                            <div class="bg-blue-600 p-2 rounded-full"><i data-lucide="check" class="w-4 h-4 text-white"></i></div>
+                            <span>تنفيذ آمن</span>
                         </div>
-                        <div class="flex items-center gap-3 reveal reveal-delay-3">
-                            <div class="w-8 h-8 rounded-full bg-royal flex items-center justify-center"><i data-lucide="check" class="w-4 h-4 text-white"></i></div>
-                            <span class="font-medium">إشراف هندسي</span>
+                        <div class="flex items-center gap-2">
+                            <div class="bg-blue-600 p-2 rounded-full"><i data-lucide="check" class="w-4 h-4 text-white"></i></div>
+                            <span>إشراف هندسي</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- SERVICES PREVIEW -->
+            <!-- Home Services Grid -->
             <section class="py-24 bg-slate-50">
                 <div class="container mx-auto px-6">
-                    <div class="text-center mb-16 reveal">
-                        <div class="section-badge bg-royal/10 text-royal mb-4 mx-auto w-fit">خدماتنا الأساسية</div>
-                        <h2 class="section-title text-slate-900">حلول شاملة لمنزلك وعملك</h2>
-                        <div class="section-divider"></div>
+                    <div class="text-center mb-16 max-w-3xl mx-auto">
+                        <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">خدماتنا الأساسية</span>
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 mb-4">حلول شاملة لمنزلك وعملك</h2>
+                        <div class="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-amber-500 mx-auto rounded-full"></div>
                     </div>
                     <div id="home-services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <!-- Injected by JS -->
                     </div>
-                    <div class="text-center mt-16 reveal">
-                        <button onclick="navigateTo('services')" class="btn-outline !text-royal !border-royal/20 hover:!bg-royal/5 hover:!border-royal/40 text-base">
+                    <div class="text-center mt-16">
+                        <button onclick="navigateTo('services')" class="px-10 py-4 bg-white text-blue-900 border border-blue-200 rounded-full font-bold hover:bg-blue-50 hover:border-blue-300 shadow-lg hover:shadow-xl transition-all flex items-center gap-2 mx-auto">
                             عرض جميع الخدمات <i data-lucide="arrow-left" class="w-4 h-4"></i>
                         </button>
                     </div>
@@ -304,268 +291,302 @@
             </section>
         </div>
 
-        <!-- ====== AI ADVISOR PAGE ====== -->
+        <!-- AI ADVISOR PAGE (New Feature) -->
         <div id="ai-advisor" class="page-section hidden animate-fade-in">
-            <div class="page-header ai-gradient py-28">
-                <div class="pattern-overlay"></div>
+            <div class="bg-gradient-to-br from-indigo-900 to-purple-900 py-24 text-white relative overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/circuit-board.png')] opacity-10"></div>
                 <div class="container mx-auto px-6 relative z-10 text-center">
-                    <div class="section-badge bg-white/10 text-amber-300 mb-6 mx-auto w-fit">
-                        <i data-lucide="sparkles" class="w-4 h-4"></i> مدعوم بالذكاء الاصطناعي
+                    <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm font-bold mb-6 backdrop-blur-md">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i> مدعوم بالذكاء الاصطناعي
                     </div>
-                    <h1 class="text-4xl md:text-6xl font-black text-white mb-6">مستشار الصيانة الذكي</h1>
-                    <p class="text-xl text-purple-100 max-w-2xl mx-auto leading-relaxed">
+                    <h1 class="text-4xl md:text-6xl font-extrabold mb-6">مستشار الصيانة الذكي ✨</h1>
+                    <p class="text-xl text-indigo-100 max-w-2xl mx-auto leading-relaxed">
                         هل تواجه مشكلة في منزلك؟ صف المشكلة وسيقوم الذكاء الاصطناعي بتشخيص العطل، تحديد مدى الخطورة، واقتراح الحل المناسب فوراً.
                     </p>
                 </div>
             </div>
 
             <div class="container mx-auto px-6 -mt-16 pb-24 relative z-20">
-                <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden max-w-4xl mx-auto flex flex-col md:flex-row">
-                    <!-- Input -->
-                    <div class="md:w-1/2 p-8 md:p-10 border-l border-slate-100">
+                <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden max-w-4xl mx-auto flex flex-col md:flex-row">
+                    
+                    <!-- Input Section -->
+                    <div class="md:w-1/2 p-8 md:p-12 border-l border-slate-100">
                         <h3 class="text-2xl font-bold text-slate-900 mb-6">صف المشكلة التي تواجهها</h3>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-slate-600 mb-2">ما هي المشكلة؟</label>
-                                <textarea id="ai-problem-input" rows="5" class="form-input !pr-4 !pl-4 resize-none" placeholder="مثال: المكيف يخرج هواء حار ويصدر صوت عالي..."></textarea>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">ما هي المشكلة؟</label>
+                                <textarea id="ai-problem-input" rows="5" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition resize-none" placeholder="مثال: المكيف يخرج هواء حار ويصدر صوت عالي..."></textarea>
                             </div>
-                            <button onclick="analyzeProblem()" id="analyze-btn" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-purple-500/20 transition-all flex items-center justify-center gap-2">
+                            <button onclick="analyzeProblem()" id="analyze-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2 group">
                                 <span>تحليل المشكلة</span>
-                                <i data-lucide="search" class="w-5 h-5"></i>
+                                <i data-lucide="search" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                             </button>
                         </div>
                         <div class="mt-8 pt-6 border-t border-slate-100">
                             <p class="text-xs text-slate-400 text-center">يعتمد التحليل على تقنيات Gemini AI. النتائج هي اقتراحات أولية ولا تغني عن الفحص الفني المباشر.</p>
                         </div>
                     </div>
-                    <!-- Result -->
-                    <div class="md:w-1/2 bg-slate-50 p-8 md:p-10 flex flex-col justify-center min-h-[400px]" id="ai-result-container">
+
+                    <!-- Result Section -->
+                    <div class="md:w-1/2 bg-slate-50 p-8 md:p-12 flex flex-col justify-center min-h-[400px]" id="ai-result-container">
+                        
+                        <!-- Initial State -->
                         <div id="ai-initial-state" class="text-center text-slate-400">
-                            <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-200">
-                                <i data-lucide="cpu" class="w-10 h-10 text-purple-300"></i>
+                            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-200">
+                                <i data-lucide="cpu" class="w-10 h-10 text-indigo-300"></i>
                             </div>
                             <p class="text-lg font-medium">بانتظار وصف المشكلة...</p>
                         </div>
+
+                        <!-- Loading State -->
                         <div id="ai-loading-state" class="hidden text-center">
                             <div class="flex justify-center gap-2 mb-6">
-                                <div class="w-3 h-3 bg-purple-500 rounded-full animate-bounce"></div>
-                                <div class="w-3 h-3 bg-purple-500 rounded-full animate-bounce" style="animation-delay:0.15s"></div>
-                                <div class="w-3 h-3 bg-purple-500 rounded-full animate-bounce" style="animation-delay:0.3s"></div>
+                                <div class="w-3 h-3 bg-indigo-500 rounded-full animate-bounce"></div>
+                                <div class="w-3 h-3 bg-indigo-500 rounded-full animate-bounce delay-100"></div>
+                                <div class="w-3 h-3 bg-indigo-500 rounded-full animate-bounce delay-200"></div>
                             </div>
-                            <p class="text-purple-600 font-bold">جاري تحليل البيانات...</p>
+                            <p class="text-indigo-600 font-bold">جاري تحليل البيانات...</p>
                         </div>
-                        <div id="ai-result-content" class="hidden space-y-5 animate-fade-in">
-                            <div class="flex items-center gap-3">
+
+                        <!-- Result State -->
+                        <div id="ai-result-content" class="hidden space-y-6 animate-fade-in">
+                            <div class="flex items-center gap-3 mb-2">
                                 <span id="ai-urgency-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-100 text-red-600">عاجل</span>
                                 <span class="text-sm text-slate-500 font-bold" id="ai-category">التصنيف: تكييف</span>
                             </div>
+                            
                             <div>
-                                <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2 text-sm">
-                                    <i data-lucide="stethoscope" class="w-5 h-5 text-purple-600"></i> التشخيص المحتمل
+                                <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                                    <i data-lucide="stethoscope" class="w-5 h-5 text-indigo-600"></i> التشخيص المحتمل
                                 </h4>
-                                <p id="ai-diagnosis" class="text-slate-600 leading-relaxed text-sm bg-white p-4 rounded-xl border border-slate-200"></p>
+                                <p id="ai-diagnosis" class="text-slate-700 leading-relaxed text-sm bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                    قد يكون هناك تسرب في غاز التبريد أو عطل في الضاغط (الكمبروسر).
+                                </p>
                             </div>
+
                             <div>
-                                <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2 text-sm">
+                                <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
                                     <i data-lucide="shield-alert" class="w-5 h-5 text-amber-500"></i> نصيحة السلامة
                                 </h4>
-                                <p id="ai-safety" class="text-slate-600 text-sm bg-amber-50 p-3 rounded-xl border border-amber-100"></p>
+                                <p id="ai-safety" class="text-slate-700 text-sm bg-amber-50 p-3 rounded-lg border border-amber-100">
+                                    قم بإيقاف تشغيل المكيف فوراً لتجنب تلف الضاغط.
+                                </p>
                             </div>
-                            <button onclick="navigateTo('contact')" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold shadow-md transition flex items-center justify-center gap-2">
-                                <i data-lucide="phone" class="w-4 h-4"></i> احجز فني مختص الآن
-                            </button>
+
+                            <div class="pt-4">
+                                <button onclick="navigateTo('contact')" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold shadow-md transition-all flex items-center justify-center gap-2">
+                                    <i data-lucide="phone" class="w-4 h-4"></i> احجز فني مختص الآن
+                                </button>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ====== ABOUT PAGE ====== -->
+        <!-- ABOUT PAGE -->
         <div id="about" class="page-section hidden animate-fade-in">
-            <div class="page-header">
-                <div class="pattern-overlay"></div>
+            <div class="bg-slate-900 py-20 mb-12 relative overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556912173-3db996ea8c3e?auto=format&fit=crop&q=80&w=1920')] bg-cover bg-center opacity-10"></div>
                 <div class="container mx-auto px-6 relative z-10 text-center">
-                    <h1 class="text-4xl md:text-5xl font-black text-white mb-4">من نحن</h1>
-                    <p class="text-xl text-slate-300 max-w-xl mx-auto">نبني الثقة من خلال جودة الخدمة والالتزام بالمواعيد.</p>
+                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">من نحن</h1>
+                    <p class="text-xl text-slate-300">نبني الثقة من خلال جودة الخدمة والالتزام بالمواعيد.</p>
                 </div>
             </div>
-
-            <div class="container mx-auto px-6 py-20">
-                <!-- Mission -->
-                <div class="grid md:grid-cols-2 gap-16 items-center mb-24">
-                    <div class="reveal">
-                        <div class="section-badge bg-royal/10 text-royal mb-4">مهمتنا</div>
-                        <h2 class="text-3xl font-bold text-navy mb-6">نصنع الفرق في عالم الصيانة</h2>
-                        <p class="text-slate-600 leading-loose text-lg mb-6">
+            <div class="container mx-auto px-6 pb-20">
+                <div class="grid md:grid-cols-2 gap-16 items-center mb-20">
+                    <div>
+                        <h2 class="text-3xl font-bold text-blue-900 mb-6">مهمتنا</h2>
+                        <p class="text-slate-700 leading-loose text-lg mb-6">
                             في سفن برذرز إلكترو، نكرس جهودنا لإحداث ثورة في صناعة الصيانة في الإمارات العربية المتحدة. مهمتنا تتجاوز مجرد الإصلاحات البسيطة؛ نحن نهدف إلى تقديم حلول كهروميكانيكية مستدامة وموفرة للطاقة ومبتكرة تعزز جودة الحياة لعملائنا.
                         </p>
-                        <p class="text-slate-600 leading-loose text-lg">
+                        <p class="text-slate-700 leading-loose text-lg">
                             نحن ملتزمون بالتدريب المستمر لفريقنا، وتبني أحدث التقنيات، والالتزام بمعايير السلامة والبيئة الصارمة لبناء علاقات دائمة قائمة على الثقة والتميز.
                         </p>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 reveal reveal-delay-2">
-                        <img src="https://images.unsplash.com/photo-1531973576160-7125cd663d86?auto=format&fit=crop&q=80&w=400" class="rounded-2xl shadow-lg w-full h-64 object-cover transform translate-y-8">
-                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=400" class="rounded-2xl shadow-lg w-full h-64 object-cover">
+                    <div class="grid grid-cols-2 gap-4">
+                        <img src="https://images.unsplash.com/photo-1531973576160-7125cd663d86?auto=format&fit=crop&q=80&w=400" class="rounded-xl shadow-lg w-full h-64 object-cover transform translate-y-8">
+                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=400" class="rounded-xl shadow-lg w-full h-64 object-cover">
                     </div>
                 </div>
-
-                <!-- Values -->
+                
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="feature-card reveal">
-                        <div class="feature-icon bg-blue-50 text-royal"><i data-lucide="eye" class="w-7 h-7"></i></div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">رؤيتنا</h3>
-                        <p class="text-slate-500 leading-relaxed">أن نكون شركة الصيانة الرائدة في الإمارات والمعروفة بالابتكار والتميز في تقديم الحلول الفنية.</p>
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-6 text-blue-600">
+                            <i data-lucide="eye" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">رؤيتنا</h3>
+                        <p class="text-slate-600 leading-relaxed">أن نكون شركة الصيانة الرائدة في الإمارات والمعروفة بالابتكار والتميز في تقديم الحلول الفنية.</p>
                     </div>
-                    <div class="feature-card reveal reveal-delay-1">
-                        <div class="feature-icon bg-amber-50 text-gold"><i data-lucide="diamond" class="w-7 h-7"></i></div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">قيمنا</h3>
-                        <p class="text-slate-500 leading-relaxed">النزاهة، الشفافية، الالتزام بالمواعيد، وإتقان العمل هي الركائز التي نبني عليها علاقتنا بعملائنا.</p>
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
+                         <div class="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center mb-6 text-amber-600">
+                            <i data-lucide="diamond" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">قيمنا</h3>
+                        <p class="text-slate-600 leading-relaxed">النزاهة، الشفافية، الالتزام بالمواعيد، وإتقان العمل هي الركائز التي نبني عليها علاقتنا بعملائنا.</p>
                     </div>
-                    <div class="feature-card reveal reveal-delay-2">
-                        <div class="feature-icon bg-green-50 text-green-600"><i data-lucide="users" class="w-7 h-7"></i></div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">فريقنا</h3>
-                        <p class="text-slate-500 leading-relaxed">قوى عاملة متفانية من المهندسين المعتمدين والفنيين المهرة الجاهزون لخدمتكم على مدار الساعة.</p>
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
+                         <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-6 text-green-600">
+                            <i data-lucide="users" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">فريقنا</h3>
+                        <p class="text-slate-600 leading-relaxed">قوى عاملة متفانية من المهندسين المعتمدين والفنيين المهرة الجاهزون لخدمتكم على مدار الساعة.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ====== SERVICES PAGE ====== -->
+        <!-- SERVICES PAGE -->
         <div id="services" class="page-section hidden animate-fade-in">
-            <div class="page-header">
-                <div class="pattern-overlay"></div>
+            <div class="bg-slate-900 py-20 mb-12 relative overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1920')] bg-cover bg-center opacity-10"></div>
                 <div class="container mx-auto px-6 relative z-10 text-center">
-                    <h1 class="text-4xl md:text-5xl font-black text-white mb-4">خدماتنا</h1>
-                    <p class="text-xl text-slate-300 max-w-xl mx-auto">حلول شاملة واحترافية لجميع احتياجاتك.</p>
+                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">خدماتنا</h1>
+                    <p class="text-xl text-slate-300">حلول شاملة واحترافية لجميع احتياجاتك.</p>
                 </div>
             </div>
-            <div class="container mx-auto px-6 py-20">
-                <div id="all-services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            <div class="container mx-auto px-6 pb-20">
+                <div id="all-services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Injected by JS -->
+                </div>
             </div>
         </div>
 
-        <!-- SERVICE DETAIL -->
-        <div id="service-detail" class="page-section hidden animate-fade-in"></div>
+        <!-- SERVICE DETAIL PAGE -->
+        <div id="service-detail" class="page-section hidden animate-fade-in">
+            <!-- Content injected by JS -->
+        </div>
 
-        <!-- ====== PROJECTS PAGE ====== -->
+        <!-- PROJECTS (PORTFOLIO) PAGE -->
         <div id="projects" class="page-section hidden animate-fade-in">
-            <div class="page-header">
-                <div class="pattern-overlay"></div>
+             <div class="bg-slate-900 py-20 mb-12 relative overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=1920')] bg-cover bg-center opacity-10"></div>
                 <div class="container mx-auto px-6 relative z-10 text-center">
-                    <h1 class="text-4xl md:text-5xl font-black text-white mb-4">مشاريعنا</h1>
-                    <p class="text-xl text-slate-300 max-w-xl mx-auto">قصص نجاح ومشاريع تم إنجازها بإتقان.</p>
+                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">مشاريعنا</h1>
+                    <p class="text-xl text-slate-300">قصص نجاح ومشاريع تم إنجازها بإتقان.</p>
                 </div>
             </div>
-            <div class="container mx-auto px-6 py-20">
-                <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            <div class="container mx-auto px-6 pb-20">
+                <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Projects injected by JS -->
+                </div>
             </div>
         </div>
 
-        <!-- PROJECT DETAIL -->
-        <div id="project-detail" class="page-section hidden animate-fade-in"></div>
+        <!-- PROJECT DETAIL PAGE -->
+        <div id="project-detail" class="page-section hidden animate-fade-in">
+            <!-- Content injected by JS -->
+        </div>
 
-        <!-- ====== FAQ PAGE ====== -->
+        <!-- FAQ PAGE -->
         <div id="faq" class="page-section hidden animate-fade-in">
-            <div class="page-header">
-                <div class="pattern-overlay"></div>
-                <div class="container mx-auto px-6 relative z-10 text-center">
-                    <h1 class="text-4xl md:text-5xl font-black text-white mb-4">الأسئلة الشائعة</h1>
-                    <p class="text-xl text-slate-300">إجابات على أكثر الأسئلة تكراراً</p>
+             <div class="bg-slate-100 py-20 mb-12">
+                <div class="container mx-auto px-6 text-center">
+                    <h1 class="text-4xl font-bold text-slate-900 mb-4">الأسئلة الشائعة</h1>
+                    <p class="text-slate-600">إجابات على أكثر الأسئلة تكراراً</p>
                 </div>
             </div>
-            <div class="container mx-auto px-6 max-w-3xl py-20">
-                <div id="faq-list" class="space-y-4"></div>
+            <div class="container mx-auto px-6 max-w-3xl pb-20">
+                <div id="faq-list" class="space-y-4">
+                    <!-- Injected by JS -->
+                </div>
             </div>
         </div>
 
-        <!-- ====== CONTACT PAGE ====== -->
+        <!-- CONTACT PAGE -->
         <div id="contact" class="page-section hidden animate-fade-in">
-            <div class="page-header py-28">
-                <div class="pattern-overlay"></div>
+            <!-- Modern Contact Header -->
+            <div class="relative bg-slate-900 py-24 overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1423666639041-f142fcb963ce?q=80&w=1920')] bg-cover bg-center opacity-20"></div>
                 <div class="container mx-auto px-6 relative z-10 text-center">
-                    <h1 class="text-4xl md:text-5xl font-black text-white mb-4">اتصل بنا</h1>
+                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">اتصل بنا</h1>
                     <p class="text-xl text-slate-300 max-w-2xl mx-auto">نحن هنا لمساعدتك على مدار الساعة. تواصل معنا لأي استفسار أو طلب خدمة.</p>
                 </div>
             </div>
 
+            <!-- Floating Contact Card -->
             <div class="container mx-auto px-6 pb-24 -mt-16 relative z-20">
-                <div class="bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-slate-100">
-
-                    <!-- Contact Info Side -->
-                    <div class="lg:w-5/12 bg-gradient-to-br from-navy to-royal text-white p-10 relative overflow-hidden">
-                        <div class="absolute -top-20 -right-20 w-60 h-60 bg-white/5 rounded-full"></div>
-                        <div class="absolute bottom-10 left-10 w-32 h-32 bg-gold/10 rounded-full"></div>
-
-                        <h3 class="text-2xl font-bold mb-10 relative z-10">معلومات الاتصال</h3>
-
-                        <div class="space-y-6 relative z-10">
-                            <div class="contact-info-card">
-                                <div class="contact-icon-box">
-                                    <i data-lucide="map-pin" class="w-5 h-5 text-gold"></i>
+                <div class="bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+                    <!-- Left Side: Contact Info (Dark Blue) -->
+                    <div class="lg:w-5/12 bg-blue-900 text-white p-10 relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-800 rounded-full opacity-50"></div>
+                        <div class="absolute bottom-10 left-10 w-20 h-20 bg-blue-500 rounded-full opacity-20"></div>
+                        
+                        <h3 class="text-2xl font-bold mb-8 relative z-10">معلومات الاتصال</h3>
+                        
+                        <div class="space-y-8 relative z-10">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-white/10">
+                                    <i data-lucide="map-pin" class="w-6 h-6 text-amber-400"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-blue-100 mb-1">الموقع</h4>
-                                    <p class="text-blue-200 text-sm">أبوظبي، الإمارات</p>
+                                    <h4 class="font-bold text-lg mb-1 text-blue-100">الموقع</h4>
+                                    <p class="text-blue-200 leading-relaxed">أبوظبي، الإمارات</p>
                                 </div>
                             </div>
-                            <div class="contact-info-card">
-                                <div class="contact-icon-box">
-                                    <i data-lucide="phone" class="w-5 h-5 text-gold"></i>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-white/10">
+                                    <i data-lucide="phone" class="w-6 h-6 text-amber-400"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-blue-100 mb-1">الهاتف</h4>
+                                    <h4 class="font-bold text-lg mb-1 text-blue-100">الهاتف</h4>
                                     <p class="text-blue-200 font-mono text-lg" dir="ltr">+971 56 909 8867</p>
-                                    <p class="text-xs text-blue-300 mt-1 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> متواجدون 24/7</p>
+                                    <p class="text-sm text-blue-300 mt-1 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> متواجدون 24/7 للحالات الطارئة</p>
                                 </div>
                             </div>
-                            <div class="contact-info-card">
-                                <div class="contact-icon-box">
-                                    <i data-lucide="mail" class="w-5 h-5 text-gold"></i>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-white/10">
+                                    <i data-lucide="mail" class="w-6 h-6 text-amber-400"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-blue-100 mb-1">البريد الإلكتروني</h4>
-                                    <p class="text-blue-200 text-sm break-all">sevenbrotherelectromechanical@gmail.com</p>
+                                    <h4 class="font-bold text-lg mb-1 text-blue-100">البريد الإلكتروني</h4>
+                                    <p class="text-blue-200 break-all">sevenbrotherelectromechanical@gmail.com</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mt-10 relative rounded-xl overflow-hidden border border-white/10 h-36 group cursor-pointer">
-                            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition duration-500 group-hover:scale-110">
+                        <div class="mt-12 group cursor-pointer relative rounded-xl overflow-hidden border border-white/20 h-40">
+                            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition duration-500 transform group-hover:scale-110">
+                            <div class="absolute inset-0 bg-blue-900/40 group-hover:bg-blue-900/20 transition duration-300"></div>
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <span class="flex items-center gap-2 text-white font-bold bg-black/30 backdrop-blur-md px-4 py-2 rounded-lg border border-white/20 text-sm">
-                                    <i data-lucide="map" class="w-4 h-4"></i> عرض على الخريطة
+                                <span class="flex items-center gap-2 text-white font-bold bg-black/40 px-4 py-2 rounded-lg backdrop-blur-md border border-white/30 group-hover:bg-blue-600/80 transition">
+                                    <i data-lucide="map"></i> عرض الموقع على الخريطة
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Form Side -->
-                    <div class="lg:w-7/12 p-8 md:p-12">
+                    <!-- Right Side: Contact Form (White) -->
+                    <div class="lg:w-7/12 p-8 md:p-12 bg-white">
                         <h3 class="text-2xl font-bold text-slate-900 mb-2">أرسل لنا رسالة</h3>
-                        <p class="text-slate-500 mb-8 text-sm">هل لديك استفسار أو تحتاج إلى عرض سعر؟ املأ النموذج أدناه وسنرد عليك في أقرب وقت.</p>
+                        <p class="text-slate-500 mb-8">هل لديك استفسار أو تحتاج إلى عرض سعر؟ املأ النموذج أدناه وسنرد عليك في أقرب وقت.</p>
 
-                        <form class="space-y-5" onsubmit="event.preventDefault(); alert('تم استلام رسالتك! سنتصل بك قريباً.');">
-                            <div class="grid md:grid-cols-2 gap-5">
-                                <div class="form-group">
-                                    <label class="block text-sm font-medium text-slate-600 mb-2">الاسم</label>
+                        <form class="space-y-6" onsubmit="event.preventDefault(); alert('تم استلام رسالتك! سنتصل بك قريباً.');">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="group">
+                                    <label class="block text-sm font-medium text-slate-700 mb-2 group-focus-within:text-blue-600 transition">الاسم</label>
                                     <div class="relative">
-                                        <i data-lucide="user" class="form-icon w-5 h-5"></i>
-                                        <input type="text" class="form-input" placeholder="الاسم الكامل" required>
+                                        <i data-lucide="user" class="absolute right-3 top-3.5 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition"></i>
+                                        <input type="text" class="w-full pr-10 pl-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition bg-slate-50 focus:bg-white" placeholder="الاسم الكامل" required>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="block text-sm font-medium text-slate-600 mb-2">رقم الهاتف</label>
+                                <div class="group">
+                                    <label class="block text-sm font-medium text-slate-700 mb-2 group-focus-within:text-blue-600 transition">رقم الهاتف</label>
                                     <div class="relative">
-                                        <i data-lucide="phone" class="form-icon w-5 h-5"></i>
-                                        <input type="tel" class="form-input" placeholder="05x xxx xxxx" dir="ltr" required>
+                                        <i data-lucide="phone" class="absolute right-3 top-3.5 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition"></i>
+                                        <input type="tel" class="w-full pr-10 pl-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition bg-slate-50 focus:bg-white" placeholder="05x xxx xxxx" dir="ltr" required>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="block text-sm font-medium text-slate-600 mb-2">نوع الخدمة</label>
+
+                            <div class="group">
+                                <label class="block text-sm font-medium text-slate-700 mb-2 group-focus-within:text-blue-600 transition">نوع الخدمة</label>
                                 <div class="relative">
-                                    <i data-lucide="wrench" class="form-icon w-5 h-5"></i>
-                                    <select class="form-input appearance-none cursor-pointer">
+                                    <i data-lucide="wrench" class="absolute right-3 top-3.5 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition"></i>
+                                    <select class="w-full pr-10 pl-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition bg-slate-50 focus:bg-white appearance-none cursor-pointer">
                                         <option value="" disabled selected>اختر الخدمة المطلوبة...</option>
                                         <option value="ac">صيانة التكييف</option>
                                         <option value="plumbing">أعمال السباكة</option>
@@ -574,16 +595,18 @@
                                         <option value="cleaning">تنظيف</option>
                                         <option value="other">أخرى</option>
                                     </select>
-                                    <i data-lucide="chevron-down" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none"></i>
+                                    <i data-lucide="chevron-down" class="absolute left-3 top-3.5 w-5 h-5 text-slate-400 pointer-events-none"></i>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="block text-sm font-medium text-slate-600 mb-2">الرسالة</label>
-                                <textarea rows="4" class="form-input !pr-4 !pl-4 resize-none" placeholder="كيف يمكننا مساعدتك؟" required></textarea>
+
+                            <div class="group">
+                                <label class="block text-sm font-medium text-slate-700 mb-2 group-focus-within:text-blue-600 transition">الرسالة</label>
+                                <textarea rows="4" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition bg-slate-50 focus:bg-white resize-none" placeholder="كيف يمكننا مساعدتك؟" required></textarea>
                             </div>
-                            <button type="submit" class="btn-primary w-full py-4 text-base">
+
+                            <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 group transform active:scale-[0.98]">
                                 <span>إرسال الرسالة</span>
-                                <i data-lucide="send" class="w-5 h-5"></i>
+                                <i data-lucide="send" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>
                             </button>
                         </form>
                     </div>
@@ -592,146 +615,183 @@
         </div>
     </main>
 
-    <!-- ========================================
-         FOOTER
-         ======================================== -->
-    <footer class="bg-navy text-white pt-20 pb-8">
+    <!-- Improved Footer -->
+    <footer class="bg-gradient-to-br from-slate-900 to-blue-950 text-white pt-20 pb-10 border-t-4 border-blue-600">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-                <!-- Brand -->
+                <!-- Col 1: Brand -->
                 <div class="space-y-6">
                     <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-royal to-royal-light rounded-xl flex items-center justify-center shadow-lg shadow-royal/20">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                             <i data-lucide="zap" class="w-7 h-7 text-white"></i>
                         </div>
-                        <div>
-                            <span class="text-xl font-black tracking-tight block" dir="ltr">SB Electro</span>
-                            <span class="text-[10px] text-slate-400 tracking-widest uppercase">Technical Services</span>
+                        <div class="flex flex-col">
+                            <span class="text-2xl font-extrabold tracking-tight" dir="ltr">SB Electro</span>
+                            <span class="text-xs text-blue-200 tracking-widest uppercase">Technical Services</span>
                         </div>
                     </div>
-                    <p class="text-slate-400 leading-relaxed text-sm">
+                    <p class="text-slate-300 leading-relaxed text-sm">
                         سفن برذرز إلكترو: رواد الصيانة الكهروميكانيكية في الإمارات. نقدم حلولاً مبتكرة ومستدامة لمنزلك وعملك.
                     </p>
-                    <div class="flex gap-3">
-                        <a href="https://www.facebook.com/share/17PxwDA1Vj/" target="_blank" class="social-icon hover:bg-blue-600 hover:border-blue-600"><i data-lucide="facebook" class="w-4 h-4"></i></a>
-                        <a href="https://x.com/sevenbrother867?s=09" target="_blank" class="social-icon hover:bg-sky-500 hover:border-sky-500"><i data-lucide="twitter" class="w-4 h-4"></i></a>
-                        <a href="https://www.instagram.com/sevenbrotherselectromechanical?utm_source=qr&igsh=MWlxdnJ2MGFvMjRiNQ==" target="_blank" class="social-icon hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-                        <a href="https://youtube.com/@sevenbrothererelectromecha5077?si=sfe7l8j4b0w4riyq" target="_blank" class="social-icon hover:bg-red-600 hover:border-red-600"><i data-lucide="youtube" class="w-4 h-4"></i></a>
-                        <a href="https://www.tiktok.com/@sevenbrotherofficial_01?_r=1&_t=ZS-91wgWNj1hIa" target="_blank" class="social-icon hover:bg-pink-600 hover:border-pink-600">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                    <div class="flex gap-4 pt-2">
+                        <a href="https://www.facebook.com/share/17PxwDA1Vj/" target="_blank" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-blue-600 transition-all hover:-translate-y-1">
+                            <i data-lucide="facebook" class="w-6 h-6"></i>
                         </a>
-                        <a href="https://www.snapchat.com/add/sevenbrotherele?share_id=EeCTQSBDxy4&locale=en-GB" target="_blank" class="social-icon hover:bg-yellow-400 hover:border-yellow-400 hover:text-navy">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm3.5 7.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg>
+                        <a href="https://x.com/sevenbrother867?s=09" target="_blank" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-blue-600 transition-all hover:-translate-y-1">
+                            <i data-lucide="twitter" class="w-6 h-6"></i>
+                        </a>
+                        <a href="https://www.instagram.com/sevenbrotherselectromechanical?utm_source=qr&igsh=MWlxdnJ2MGFvMjRiNQ==" target="_blank" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-blue-600 transition-all hover:-translate-y-1">
+                            <i data-lucide="instagram" class="w-6 h-6"></i>
+                        </a>
+                        <a href="https://youtube.com/@sevenbrothererelectromecha5077?si=sfe7l8j4b0w4riyq" target="_blank" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-red-600 transition-all hover:-translate-y-1">
+                            <i data-lucide="youtube" class="w-6 h-6"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@sevenbrotherofficial_01?_r=1&_t=ZS-91wgWNj1hIa" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-pink-600 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.snapchat.com/add/sevenbrotherele?share_id=EeCTQSBDxy4&locale=en-GB" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-400 transition-all hover:-translate-y-1">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm3.5 7.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/>
+                            </svg>
                         </a>
                     </div>
                 </div>
 
-                <!-- Links -->
+                <!-- Col 2: Links -->
                 <div>
-                    <h4 class="text-sm font-bold mb-6 text-gold uppercase tracking-widest">روابط سريعة</h4>
+                    <h4 class="text-lg font-bold mb-6 text-white flex items-center gap-2">
+                        <span class="w-8 h-1 bg-blue-500 rounded-full"></span>
+                        روابط سريعة
+                    </h4>
                     <ul class="space-y-3">
-                        <li><button onclick="navigateTo('home')" class="footer-link"><i data-lucide="chevron-left" class="w-3.5 h-3.5 text-royal"></i> الرئيسية</button></li>
-                        <li><button onclick="navigateTo('about')" class="footer-link"><i data-lucide="chevron-left" class="w-3.5 h-3.5 text-royal"></i> من نحن</button></li>
-                        <li><button onclick="navigateTo('services')" class="footer-link"><i data-lucide="chevron-left" class="w-3.5 h-3.5 text-royal"></i> خدماتنا</button></li>
-                        <li><button onclick="navigateTo('projects')" class="footer-link"><i data-lucide="chevron-left" class="w-3.5 h-3.5 text-royal"></i> مشاريعنا</button></li>
-                        <li><button onclick="navigateTo('contact')" class="footer-link"><i data-lucide="chevron-left" class="w-3.5 h-3.5 text-royal"></i> اتصل بنا</button></li>
+                        <li><button onclick="navigateTo('home')" class="text-slate-300 hover:text-white hover:translate-x-[-5px] transition-all flex items-center gap-2"><i data-lucide="chevron-left" class="w-4 h-4 text-blue-500"></i> الرئيسية</button></li>
+                        <li><button onclick="navigateTo('about')" class="text-slate-300 hover:text-white hover:translate-x-[-5px] transition-all flex items-center gap-2"><i data-lucide="chevron-left" class="w-4 h-4 text-blue-500"></i> من نحن</button></li>
+                        <li><button onclick="navigateTo('services')" class="text-slate-300 hover:text-white hover:translate-x-[-5px] transition-all flex items-center gap-2"><i data-lucide="chevron-left" class="w-4 h-4 text-blue-500"></i> خدماتنا</button></li>
+                        <li><button onclick="navigateTo('projects')" class="text-slate-300 hover:text-white hover:translate-x-[-5px] transition-all flex items-center gap-2"><i data-lucide="chevron-left" class="w-4 h-4 text-blue-500"></i> مشاريعنا</button></li>
+                        <li><button onclick="navigateTo('contact')" class="text-slate-300 hover:text-white hover:translate-x-[-5px] transition-all flex items-center gap-2"><i data-lucide="chevron-left" class="w-4 h-4 text-blue-500"></i> اتصل بنا</button></li>
                     </ul>
                 </div>
 
-                <!-- Services -->
+                <!-- Col 3: Services -->
                 <div>
-                    <h4 class="text-sm font-bold mb-6 text-gold uppercase tracking-widest">أفضل الخدمات</h4>
-                    <ul class="space-y-3 text-slate-400 text-sm">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-gold"></div> صيانة التكييف</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-gold"></div> الأعمال الكهربائية</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-gold"></div> حلول السباكة</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-gold"></div> دهانات الإيبوكسي</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-gold"></div> مكافحة الحشرات</li>
+                    <h4 class="text-lg font-bold mb-6 text-white flex items-center gap-2">
+                        <span class="w-8 h-1 bg-blue-500 rounded-full"></span>
+                        أفضل الخدمات
+                    </h4>
+                    <ul class="space-y-3">
+                        <li class="text-slate-300 flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500"></i> صيانة التكييف</li>
+                        <li class="text-slate-300 flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500"></i> الأعمال الكهربائية</li>
+                        <li class="text-slate-300 flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500"></i> حلول السباكة</li>
+                        <li class="text-slate-300 flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500"></i> دهانات الإيبوكسي</li>
+                        <li class="text-slate-300 flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-blue-500"></i> مكافحة الحشرات</li>
                     </ul>
                 </div>
 
-                <!-- Contact -->
+                <!-- Col 4: Contact & Newsletter -->
                 <div>
-                    <h4 class="text-sm font-bold mb-6 text-gold uppercase tracking-widest">معلومات الاتصال</h4>
-                    <ul class="space-y-4 mb-8 text-sm">
-                        <li class="flex items-center gap-3 text-slate-400">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-royal flex-shrink-0"></i>
-                            <span>أبوظبي، الإمارات</span>
+                    <h4 class="text-lg font-bold mb-6 text-white flex items-center gap-2">
+                        <span class="w-8 h-1 bg-blue-500 rounded-full"></span>
+                        معلومات الاتصال
+                    </h4>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3 text-slate-300 group">
+                            <div class="w-8 h-8 bg-white/5 rounded flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-blue-400 group-hover:text-white"></i>
+                            </div>
+                            <span class="text-sm leading-relaxed">أبوظبي، الإمارات</span>
                         </li>
-                        <li class="flex items-center gap-3 text-slate-400">
-                            <i data-lucide="phone" class="w-4 h-4 text-royal flex-shrink-0"></i>
-                            <span dir="ltr" class="font-bold text-slate-300">+971 56 909 8867</span>
+                        <li class="flex items-center gap-3 text-slate-300 group">
+                            <div class="w-8 h-8 bg-white/5 rounded flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+                                <i data-lucide="phone" class="w-4 h-4 text-blue-400 group-hover:text-white"></i>
+                            </div>
+                            <span dir="ltr" class="text-sm font-bold">+971 56 909 8867</span>
                         </li>
-                        <li class="flex items-center gap-3 text-slate-400">
-                            <i data-lucide="mail" class="w-4 h-4 text-royal flex-shrink-0"></i>
-                            <span class="text-xs">sevenbrotherelectromechanical@gmail.com</span>
+                        <li class="flex items-center gap-3 text-slate-300 group">
+                            <div class="w-8 h-8 bg-white/5 rounded flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+                                <i data-lucide="mail" class="w-4 h-4 text-blue-400 group-hover:text-white"></i>
+                            </div>
+                            <span class="text-sm">sevenbrotherelectromechanical@gmail.com</span>
                         </li>
                     </ul>
-                    <div class="bg-white/5 p-4 rounded-xl border border-white/5">
-                        <p class="text-xs text-slate-500 mb-3">اشترك في نشرتنا الإخبارية</p>
+                    
+                    <!-- Newsletter -->
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                        <p class="text-xs text-blue-200 mb-3">اشترك في نشرتنا الإخبارية</p>
                         <div class="flex gap-2">
-                            <input type="email" placeholder="بريدك الإلكتروني" class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white w-full focus:ring-1 focus:ring-royal outline-none placeholder-slate-500">
-                            <button class="bg-royal hover:bg-royal-light text-white rounded-lg px-3 py-2 transition">
+                            <input type="email" placeholder="بريدك الإلكتروني" class="bg-white/10 border-none rounded-lg px-3 py-2 text-xs text-white w-full focus:ring-2 focus:ring-blue-500 outline-none placeholder-slate-400">
+                            <button class="bg-blue-600 hover:bg-blue-500 text-white rounded-lg px-3 py-2 transition-colors">
                                 <i data-lucide="send" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Bottom -->
-            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
                 <p>&copy; 2024 سفن برذرز إلكترو. جميع الحقوق محفوظة.</p>
                 <div class="flex gap-6">
-                    <a href="#" class="hover:text-white transition">سياسة الخصوصية</a>
-                    <a href="#" class="hover:text-white transition">الشروط والأحكام</a>
+                    <a href="#" class="hover:text-white transition-colors">سياسة الخصوصية</a>
+                    <a href="#" class="hover:text-white transition-colors">الشروط والأحكام</a>
+                    <a href="#" class="hover:text-white transition-colors">خريطة الموقع</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- ========================================
-         FIXED BUTTONS (WhatsApp + Chat)
-         ======================================== -->
-    <a href="https://wa.me/971569098867" target="_blank" class="fixed bottom-6 left-6 bg-green-500 text-white p-3.5 rounded-2xl shadow-lg shadow-green-500/30 hover:bg-green-600 hover:scale-110 transition-all z-40">
-        <svg viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7">
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/971569098867" target="_blank" class="fixed bottom-6 left-6 bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 hover:scale-110 transition-all z-40 flex items-center justify-center">
+        <svg viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 -ml-0.5 mt-0.5">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.305-5.235c0-5.453 4.435-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
         </svg>
     </a>
 
-    <button onclick="toggleChat()" class="fixed bottom-20 left-6 bg-royal text-white p-3.5 rounded-2xl shadow-lg shadow-royal/30 hover:bg-royal-light transition-all z-50 group">
-        <i data-lucide="message-circle" class="w-7 h-7 group-hover:scale-110 transition-transform"></i>
-        <span class="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full pulse-dot text-red-500"></span>
+    <!-- Chat Bot Button -->
+    <button onclick="toggleChat()" class="fixed bottom-24 left-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all z-50 flex items-center justify-center group">
+        <i data-lucide="message-circle" class="w-8 h-8 group-hover:scale-110 transition-transform"></i>
+        <span class="absolute -top-1 -right-1 flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+        </span>
     </button>
 
     <!-- Chat Window -->
-    <div id="chat-window" class="fixed bottom-0 left-0 w-full h-[70vh] rounded-t-2xl md:bottom-36 md:left-6 md:w-96 md:h-[500px] md:rounded-2xl bg-white shadow-2xl z-50 hidden border border-slate-200 overflow-hidden flex flex-col transition-all origin-bottom-left transform scale-95 opacity-0">
-        <div class="bg-gradient-to-r from-navy to-royal p-4 text-white flex justify-between items-center">
-            <div class="flex items-center gap-3">
+    <div id="chat-window" class="fixed bottom-0 left-0 w-full h-[70vh] rounded-t-2xl rounded-b-none md:bottom-36 md:left-6 md:w-96 md:h-[500px] md:rounded-2xl bg-white shadow-2xl z-50 hidden border border-slate-200 overflow-hidden flex flex-col transition-all origin-bottom-left transform scale-95 opacity-0">
+        <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
+            <div class="flex items-center gap-2">
                 <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <div>
-                    <span class="font-bold text-sm block">مساعد SB Electro</span>
+                <div class="flex flex-col">
+                    <span class="font-bold text-sm">مساعد SB Electro</span>
                     <span class="text-[10px] text-blue-200">متاح للمساعدة الفورية</span>
                 </div>
             </div>
-            <button onclick="toggleChat()" class="hover:bg-white/10 p-1.5 rounded-lg transition"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <button onclick="toggleChat()" class="hover:bg-blue-700 p-1 rounded"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
         <div id="chat-messages" class="flex-grow overflow-y-auto p-4 space-y-3 bg-slate-50">
+            <!-- Initial Message -->
             <div class="flex justify-start">
-                <div class="bg-white border border-slate-200 text-slate-700 p-3 rounded-2xl rounded-br-sm shadow-sm text-sm max-w-[85%] leading-relaxed">
+                <div class="bg-white border border-slate-200 text-slate-700 p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm text-sm max-w-[85%] leading-relaxed">
                     مرحباً بك في SB Electro! 👋<br>
-                    أنا مساعدك الافتراضي. نحن نقدم خدمات صيانة موثوقة وعالية الجودة في الإمارات.<br><br>
-                    كيف يمكنني مساعدتك اليوم؟
+                    أنا مساعدك الافتراضي. نحن نقدم خدمات صيانة موثوقة وعالية الجودة في دبي.<br><br>
+                    كيف يمكنني مساعدتك اليوم؟ يمكنك سؤالي عن:<br>
+                    🔹 الخدمات المتاحة<br>
+                    🔹 الأسعار<br>
+                    🔹 حجز موعد
                 </div>
             </div>
         </div>
         <div class="p-3 bg-white border-t border-slate-100 flex gap-2">
-            <input type="text" id="chat-input" class="flex-grow bg-slate-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-royal/20" placeholder="اكتب رسالتك..." onkeypress="handleChatInput(event)" autocomplete="off">
-            <button onclick="sendChatMessage()" class="bg-royal text-white p-2.5 rounded-xl hover:bg-royal-light transition"><i data-lucide="send" class="w-4 h-4"></i></button>
+            <input type="text" id="chat-input" class="flex-grow bg-slate-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="اكتب رسالتك..." onkeypress="handleChatInput(event)" autocomplete="off">
+            <button onclick="sendChatMessage()" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700"><i data-lucide="send" class="w-4 h-4"></i></button>
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script src="js/script.js"></script>
-</body>
+    <!-- JavaScript Logic -->
+    
+<script src="js/script.js"></script>`n</body>
 </html>
+
+
+
