@@ -504,7 +504,7 @@
             }
 
             const systemPrompt = `
-                You are an expert technical consultant for SB Electro (UAE). Analyze the user's maintenance problem description in Arabic.
+                You are an expert technical consultant for Seven Brothers Electromechanical (UAE). Analyze the user's maintenance problem description in Arabic.
                 Output ONLY a JSON object with this structure:
                 {
                     "category": "Service Category (e.g., AC, Plumbing, Electrical)",
@@ -628,7 +628,7 @@
                 
                 // Enhanced Offline Logic
                 if (lowerMsg.match(/(مرحبا|هلا|السلام|hi|hello|hey)/)) {
-                    return "أهلاً بك في SB Electro! 🛠️\nكيف يمكنني مساعدتك اليوم في خدمات الصيانة؟";
+                    return "أهلاً بك في Seven Brothers Electromechanical! 🛠️\nكيف يمكنني مساعدتك اليوم في خدمات الصيانة؟";
                 }
                 
                 if (lowerMsg.match(/(تكييف|مكيف|تبريد|حار|ac|cool)/)) {
@@ -648,7 +648,7 @@
                 }
 
                 if (lowerMsg.match(/(سعر|تكلفة|بكم|فلوس|price|cost)/)) {
-                    return "تعتمد التكلفة على نوع الخدمة وحجم العمل. 💰\nننصح بحجز **معاينة مجانية** لتقديم عرض سعر دقيق.\nيمكنك الاتصال بنا على 0544146567.";
+                    return "تعتمد التكلفة على نوع الخدمة وحجم العمل. 💰\nننصح بحجز **معاينة مجانية** لتقديم عرض سعر دقيق.\nيمكنك الاتصال بنا على +971 56 909 8867.";
                 }
                 
                 if (lowerMsg.match(/(موقع|عنوان|وين|location|address)/)) {
@@ -656,7 +656,7 @@
                 }
                 
                 if (lowerMsg.match(/(رقم|تليفون|اتصال|contact|phone)/)) {
-                    return "يمكنك التواصل معنا مباشرة عبر:\n📞 الهاتف: 0544146567\n📧 البريد: sevenbrotherelectromechanical@gmail.com";
+                    return "يمكنك التواصل معنا مباشرة عبر:\n📞 الهاتف: +971 56 909 8867\n📧 البريد: sevenbrotherelectromechanical@gmail.com";
                 }
 
                 // Default Fallback
@@ -664,7 +664,7 @@
             }
 
             const systemPrompt = `
-                You are a helpful customer service agent for SB Electro (UAE). 
+                You are a helpful customer service agent for Seven Brothers Electromechanical (UAE). 
                 Your goal is to assist users with their inquiries about maintenance services (AC, Plumbing, Electrical, etc.).
                 Rules:
                 1. Always reply in professional Arabic.
