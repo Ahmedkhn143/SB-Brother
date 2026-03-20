@@ -1,19 +1,4 @@
 
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            blue: '#0056b3',
-                            dark: '#0f172a',
-                            accent: '#f59e0b'
-                        }
-                    }
-                }
-            }
-        }
-    
-
         const apiKey = ""; 
 
         // Data - Services
@@ -555,17 +540,21 @@
             }
         }
 
+        function escapeHTML(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
         function sendChatMessage() {
             const input = document.getElementById('chat-input');
             const message = input.value.trim();
             if (message) {
                 const messagesContainer = document.getElementById('chat-messages');
                 
-                // User Message
+                // User Message (escaped to prevent XSS)
                 const userMsgHTML = `
                     <div class="flex justify-end">
                         <div class="bg-blue-600 text-white p-3 rounded-tl-xl rounded-bl-xl rounded-br-xl shadow-sm text-sm max-w-[85%]">
-                            ${message}
+                            ${escapeHTML(message)}
                         </div>
                     </div>
                 `;
@@ -648,7 +637,7 @@
                 }
 
                 if (lowerMsg.match(/(سعر|تكلفة|بكم|فلوس|price|cost)/)) {
-                    return "تعتمد التكلفة على نوع الخدمة وحجم العمل. 💰\nننصح بحجز **معاينة مجانية** لتقديم عرض سعر دقيق.\nيمكنك الاتصال بنا على 0544146567.";
+                    return "تعتمد التكلفة على نوع الخدمة وحجم العمل. 💰\nننصح بحجز **معاينة مجانية** لتقديم عرض سعر دقيق.\nيمكنك الاتصال بنا على +971 56 909 8867.";
                 }
                 
                 if (lowerMsg.match(/(موقع|عنوان|وين|location|address)/)) {
@@ -656,7 +645,7 @@
                 }
                 
                 if (lowerMsg.match(/(رقم|تليفون|اتصال|contact|phone)/)) {
-                    return "يمكنك التواصل معنا مباشرة عبر:\n📞 الهاتف: 0544146567\n📧 البريد: sevenbrotherelectromechanical@gmail.com";
+                    return "يمكنك التواصل معنا مباشرة عبر:\n📞 الهاتف: +971 56 909 8867\n📧 البريد: sevenbrotherelectromechanical@gmail.com";
                 }
 
                 // Default Fallback
