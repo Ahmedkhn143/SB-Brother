@@ -471,28 +471,54 @@
             if (!apiKey) {
                 await new Promise(r => setTimeout(r, 2000));
                 
-                // Smart Mock Logic for Advisor
+                // Smart Mock Logic for Advisor (Expert Level)
                 const lowerMsg = userMessage.toLowerCase();
-                let category = "صيانة عامة";
-                let diagnosis = "يرجى معاينة المشكلة من قبل فني مختص.";
-                let safety = "توخى الحذر ولا تقم بالإصلاح بنفسك.";
+                let category = "صيانة عامة (General Maintenance)";
+                let diagnosis = "بناءً على وصفك، نوصي بمعاينة ميدانية من قبل فني مختص للوقوف على المشكلة الدقيقة.";
+                let safety = "يرجى عدم محاولة الإصلاح بنفسك لتجنب أي مخاطر أو أضرار إضافية.";
                 let urgency = "Medium";
 
-                if (lowerMsg.match(/(تكييف|مكيف|حار|تبريد)/)) {
-                    category = "تكييف الهواء";
-                    diagnosis = "احتمال وجود نقص في الغاز أو اتساخ في الفلاتر/الدكت.";
-                    safety = "أوقف تشغيل المكيف لتجنب تلف الضاغط.";
-                    urgency = "Medium";
-                } else if (lowerMsg.match(/(كهرباء|شرار|ريحة|حريق|طافي)/)) {
-                    category = "الكهرباء";
-                    diagnosis = "احتمال وجود ماس كهربائي أو حمل زائد على القاطع.";
-                    safety = "افصل التيار الكهربائي من اللوحة الرئيسية فوراً.";
+                // AC Issues
+                if (lowerMsg.match(/(تكييف|مكيف|حار|تبريد|صوت|ac|air|cooler|hot|cooling|noise|not cold|freon|gas)/)) {
+                    category = "تكييف الهواء (Air Conditioning)";
+                    if (lowerMsg.match(/(صوت|ازعاج|noise|loud)/)) {
+                        diagnosis = "قد يكون هناك مشكلة في مروحة الوحدة الداخلية/الخارجية، أو أجزاء ميكانيكية متآكلة تحتاج إلى استبدال.";
+                        safety = "يُفضل إيقاف تشغيل الوحدة لتجنب تفاقم العطل في المحرك الميكانيكي.";
+                    } else if (lowerMsg.match(/(حار|تبريد|hot|not cold|warm)/)) {
+                        diagnosis = "احتمال كبير بوجود نقص في غاز الفريون نتيجة تسريب، أو اتساخ شديد في الفلاتر والكويل يمنع التبادل الحراري.";
+                        safety = "أوقف تشغيل المكيف فوراً لتجنب وضع حمل إضافي يؤدي لاحتراق الضاغط (الكمبروسر).";
+                    } else {
+                        diagnosis = "يحتاج النظام إلى فحص شامل لمستوى الغاز، الفلاتر، وكفاءة الضاغط ومروحة التبريد.";
+                        safety = "تأكد من نظافة الفلاتر بشكل أولي، وإذا استمرت المشكلة اطلب الدعم الفني المختص.";
+                    }
+                    urgency = lowerMsg.match(/(حار|hot|not cold)/) ? "High" : "Medium";
+                } 
+                // Electrical Issues
+                else if (lowerMsg.match(/(كهرباء|شرار|ريحة|حريق|طافي|التماس|انقطاع|electric|spark|fire|power|breaker|outage|smoke)/)) {
+                    category = "الأعمال الكهربائية (Electrical)";
+                    diagnosis = "احتمال وجود تماس كهربائي (Short Circuit)، حمل زائد على القاطع (Tripped Breaker)، أو تآكل وتعرية في الأسلاك.";
+                    safety = "⚠️ تحذير: افصل التيار الكهربائي من اللوحة الرئيسية فوراً وابتعد عن مكان المشكلة.";
                     urgency = "High";
-                } else if (lowerMsg.match(/(ماء|تسريب|يخر|غرق)/)) {
-                    category = "السباكة";
-                    diagnosis = "تلف في الأنابيب أو وصلات المياه.";
-                    safety = "أغلق محبس المياه الرئيسي لمنع الأضرار.";
-                    urgency = "High";
+                } 
+                // Plumbing / Leaks
+                else if (lowerMsg.match(/(ماء|تسريب|يخر|غرق|حمام|مغسلة|مطبخ|بالوعة|انسداد|water|leak|pipe|plumb|sink|drain|clog|block)/)) {
+                    category = "السباكة (Plumbing)";
+                    if (lowerMsg.match(/(انسداد|مسدود|بالوعة|clog|block|drain)/)) {
+                        diagnosis = "انسداد في خطوط الصرف نتيجة تراكم الأوساخ أو ترسبات صلبة داخل الأنابيب.";
+                        safety = "تجنب استخدام المواد الكيميائية القوية (الأسيد) فقد تتآكل الأنابيب. اتصل بفني لفتح السدد بالمعدات المختصة.";
+                        urgency = "Medium";
+                    } else {
+                        diagnosis = "تسرب مياه ناتج عن كسر في الأنابيب أو تلف في الوصلات والصمامات المطاطية.";
+                        safety = "أغلق محبس المياه الرئيسي للوحدة فوراً لمنع حدوث تسربات وأضرار كبيرة في الأرضيات والجدران.";
+                        urgency = "High";
+                    }
+                }
+                // Painting / Decor
+                else if (lowerMsg.match(/(صبغ|دهان|رطوبة|تقشر|جدار|paint|color|wall|moisture|peel)/)) {
+                    category = "أعمال الصباغة (Painting)";
+                    diagnosis = "تقشر الدهان ينتج غالباً عن تسرب رطوبة مخفي خلف الجدار، أو أخطاء في التأسيس واستخدام مواد غير مقاومة للرطوبة.";
+                    safety = "إذا لاحظت بقع رطوبة مستمرة، يجب فحص السباكة القريبة قبل البدء بأي أعمال صباغة جديدة.";
+                    urgency = "Low";
                 }
 
                 return JSON.stringify({
