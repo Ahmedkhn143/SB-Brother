@@ -26,7 +26,8 @@
             { id: "cleaning", title: "خدمات التنظيف", icon: "star", shortDesc: "تنظيف عميق للمنازل والمكاتب.", fullDesc: "تنظيف عميق يزيل الشحوم والأوساخ من الأماكن الصعبة.", features: ["تنظيف عميق", "ما بعد البناء", "الكنب والسجاد"], img: "https://images.unsplash.com/photo-1647381518264-97ff1835026f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
             { id: "pest", title: "مكافحة الحشرات", icon: "shield-check", shortDesc: "قضاء فعال على الحشرات.", fullDesc: "حلول آمنة ومعتمدة لمكافحة الصراصير والنمل والقوارض.", features: ["جل", "رش", "مكافحة القوارض"], img: "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&q=80&w=800" },
             { id: "amc", title: "عقود الصيانة", icon: "calendar", shortDesc: "عقود سنوية لراحة بالك.", fullDesc: "وفر المال مع باقات الصيانة السنوية للتكييف والكهرباء والسباكة.", features: ["طوارئ 24/7", "زيارات وقائية", "خصم قطع الغيار"], img: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=800" },
-            { id: "civil", title: "أعمال مدنية", icon: "wrench", shortDesc: "بناء، نجارة، وإصلاحات.", fullDesc: "فريق ماهر للأعمال المدنية والنجارة وتجميع الأثاث.", features: ["سيراميك", "نجارة", "أعمال الطابوق"], img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800" }
+            { id: "civil", title: "أعمال مدنية", icon: "wrench", shortDesc: "بناء، نجارة، وإصلاحات.", fullDesc: "فريق ماهر للأعمال المدنية والنجارة وتجميع الأثاث.", features: ["سيراميك", "نجارة", "أعمال الطابوق"], img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800" },
+            { id: "security", title: "الأنظمة الأمنية و CCTV", icon: "video", shortDesc: "تركيب وصيانة كاميرات المراقبة والأنظمة الأمنية.", fullDesc: "احمِ منشأتك بأحدث تقنيات المراقبة. صيانة وتركيب جميع أنواع الكاميرات وأنظمة الدخول الذكية.", features: ["كاميرات ذكية", "أنظمة تحكم بالدخول", "صيانة دورية"], img: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800" }
         ];
 
         // Data - Projects
@@ -520,6 +521,13 @@
                     safety = "إذا لاحظت بقع رطوبة مستمرة، يجب فحص السباكة القريبة قبل البدء بأي أعمال صباغة جديدة.";
                     urgency = "Low";
                 }
+                // Security Cameras
+                else if (lowerMsg.match(/(كاميرا|مراقبة|سكيورتي|انذار|cctv|camera|security|alarm)/)) {
+                    category = "الأنظمة الأمنية وكاميرات المراقبة (Security & CCTV)";
+                    diagnosis = "قد يتطلب الأمر فحص التوصيلات الشبكية للكميرات، التخزين (DVR/NVR)، أو تحديد مواقع التركيب المثلى لتحقيق أفضل تغطية أمنية.";
+                    safety = "احرص على عدم العبث بأسلاك الشبكة أو مقابس الـ DVR لتجنب فقدان أي تسجيلات مهمة.";
+                    urgency = "Medium";
+                }
 
                 return JSON.stringify({
                     category: category,
@@ -671,6 +679,10 @@
                 
                 if (lowerMsg.match(/(دهان|صباغة|لون|جدار|paint)/)) {
                     return "نقدم خدمات صباغة احترافية:\n🎨 دهانات داخلية وخارجية\n🎨 معالجة الشقوق والرطوبة\n🎨 دهانات ديكورية\n\nيمكننا إرسال كتالوج الألوان إليك.";
+                }
+
+                if (lowerMsg.match(/(كاميرا|مراقبة|سكيورتي|انذار|cctv|camera|security)/)) {
+                    return "نوفر حلولاً أمنية متكاملة:\n📹 توريد وتركيب كاميرات دقيقة\n📹 صيانة أنظمة المراقبة (DVR/NVR)\n📹 تركيب أجهزة التحكم بالدخول\n\nهل ترغب بتأمين منزلك أم مكان عملك؟";
                 }
 
                 if (lowerMsg.match(/(سعر|تكلفة|بكم|فلوس|price|cost)/)) {
