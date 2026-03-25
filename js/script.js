@@ -401,6 +401,87 @@
             menu.classList.toggle('hidden');
         }
 
+        function setupContactForm() {
+            const form = document.getElementById('contact-form');
+            if (!form) return;
+
+            const submitBtn = document.getElementById('contact-submit');
+            const feedback = document.getElementById('contact-form-feedback');
+
+            const serviceLabels = {
+                ac: 'صيانة التكييف',
+                plumbing: 'أعمال السباكة',
+                electrical: 'الأعمال الكهربائية',
+                painting: 'صباغة ودهانات',
+                cleaning: 'تنظيف',
+                security: 'كاميرات المراقبة والأنظمة الأمنية',
+                other: 'خدمة أخرى'
+            };
+
+            const setFeedback = (message, type) => {
+                if (!feedback) return;
+                feedback.textContent = message;
+                feedback.classList.remove('hidden', 'bg-red-50', 'border-red-200', 'text-red-700', 'bg-green-50', 'border-green-200', 'text-green-700');
+                if (type === 'error') {
+                    feedback.classList.add('bg-red-50', 'border-red-200', 'text-red-700');
+                } else {
+                    feedback.classList.add('bg-green-50', 'border-green-200', 'text-green-700');
+                }
+            };
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const name = form.elements.name.value.trim();
+                const phone = form.elements.phone.value.trim();
+                const service = form.elements.service.value;
+                const message = form.elements.message.value.trim();
+
+                const phoneRegex = /^\+?[0-9\s-]{8,20}$/;
+                if (!name || name.length < 2) {
+                    setFeedback('يرجى إدخال الاسم بشكل صحيح (حرفان على الأقل).', 'error');
+                    return;
+                }
+                if (!phoneRegex.test(phone)) {
+                    setFeedback('يرجى إدخال رقم هاتف صحيح.', 'error');
+                    return;
+                }
+                if (!service) {
+                    setFeedback('يرجى اختيار نوع الخدمة المطلوبة.', 'error');
+                    return;
+                }
+                if (!message || message.length < 10) {
+                    setFeedback('يرجى كتابة رسالة أوضح (10 أحرف على الأقل).', 'error');
+                    return;
+                }
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+                }
+
+                const serviceText = serviceLabels[service] || service;
+                const waText =
+`طلب جديد من الموقع
+الاسم: ${name}
+الهاتف: ${phone}
+الخدمة: ${serviceText}
+الرسالة: ${message}`;
+
+                setFeedback('تم تجهيز رسالتك بنجاح. سيتم تحويلك إلى واتساب لإرسال الطلب مباشرة.', 'success');
+
+                setTimeout(() => {
+                    const waUrl = `https://wa.me/971569098867?text=${encodeURIComponent(waText)}`;
+                    window.open(waUrl, '_blank');
+                    form.reset();
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                    }
+                }, 600);
+            });
+        }
+
         // --- AI Advisor Logic (Interactive Tool) ---
         
         async function analyzeProblem() {
@@ -729,6 +810,9 @@
             return data.candidates[0].content.parts[0].text;
         }
 
-        window.addEventListener('DOMContentLoaded', init);
+        window.addEventListener('DOMContentLoaded', () => {
+            init();
+            setupContactForm();
+        });
     
 
