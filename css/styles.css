@@ -244,6 +244,17 @@ body {
     transition: all 0.3s ease;
 }
 
+.footer-trust-grid {
+    justify-items: center;
+}
+
+.footer-trust-grid .footer-trust-badge {
+    width: 100%;
+    max-width: 340px;
+    min-height: 88px;
+    padding: 0.95rem 1rem;
+}
+
 .footer-trust-badge:hover {
     background: rgba(37, 99, 235, 0.08);
     border-color: rgba(37, 99, 235, 0.25);
@@ -267,6 +278,18 @@ body {
     background: linear-gradient(135deg, #2563eb, #0284c7);
     color: #fff;
     box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+}
+
+@media (max-width: 640px) {
+    .footer-trust-grid .footer-trust-badge {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .footer-trust-grid .footer-trust-badge {
+        max-width: 300px;
+    }
 }
 
 /* ─── Column Titles ─── */
@@ -480,8 +503,9 @@ body {
 
 /* Logo Optimization for Better Display */
 .site-logo-navbar {
-    max-width: 300px;
-    height: auto;
+    max-width: none;
+    width: auto;
+    height: 52px;
     filter: contrast(1.06) saturate(1.02);
     transition: all 0.3s ease;
     image-rendering: -webkit-optimize-contrast;
@@ -523,7 +547,7 @@ body {
 
 @media (max-width: 768px) {
     .site-logo-navbar {
-        max-width: 120px;
+        height: 44px;
         margin-top: 0;
     }
 
@@ -562,7 +586,7 @@ body {
 
 @media (min-width: 768px) {
     .site-logo-navbar {
-        max-width: 250px;
+        height: 52px;
     }
 
     .brand-lockup-compact .logo-badge,
@@ -576,22 +600,22 @@ body {
     }
 
     .brand-title {
-        font-size: 1.05rem;
+        font-size: 0.88rem;
         line-height: 1.05;
     }
 
     .brand-subtitle {
-        font-size: 0.86rem;
+        font-size: 0.7rem;
     }
 
     .nav-desktop-shell {
-        padding: 0.35rem 1.25rem;
-        gap: 1.75rem;
+        padding: 0.2rem 1rem;
+        gap: 1.25rem;
         border-radius: 9999px;
     }
 
     .nav-link {
-        font-size: 1.05rem;
+        font-size: 0.96rem;
     }
 }
 
@@ -686,6 +710,30 @@ html[dir="rtl"] .brand-lockup {
 .nav-link.active {
     color: #0056b3;
     font-weight: 700;
+}
+
+.services-filter-chip {
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #334155;
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: all 0.25s ease;
+}
+
+.services-filter-chip:hover {
+    border-color: #93c5fd;
+    color: #1d4ed8;
+    background: #eff6ff;
+}
+
+.services-filter-chip.is-active {
+    border-color: #2563eb;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
 }
 
 /* Hide scrollbar */

@@ -30,6 +30,45 @@
             { id: "security", title: "الأنظمة الأمنية و CCTV", icon: "video", shortDesc: "تركيب وصيانة كاميرات المراقبة والأنظمة الأمنية.", fullDesc: "احمِ منشأتك بأحدث تقنيات المراقبة. صيانة وتركيب جميع أنواع الكاميرات وأنظمة الدخول الذكية.", features: ["كاميرات ذكية", "أنظمة تحكم بالدخول", "صيانة دورية"], img: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800" }
         ];
 
+        const SERVICE_META = {
+            ac: { category: 'cooling', badge: 'الأكثر طلباً', eta: 'خلال 60 دقيقة', priority: 1 },
+            electrical: { category: 'electrical', badge: 'فنيون معتمدون', eta: 'خلال 60-90 دقيقة', priority: 2 },
+            plumbing: { category: 'plumbing', badge: 'طوارئ 24/7', eta: 'خلال 45-75 دقيقة', priority: 3 },
+            painting: { category: 'finishing', badge: 'تشطيب احترافي', eta: 'خلال نفس اليوم', priority: 6 },
+            epoxy: { category: 'finishing', badge: 'أعمال متخصصة', eta: 'موعد حسب المشروع', priority: 8 },
+            cleaning: { category: 'finishing', badge: 'خدمة مرنة', eta: 'خلال نفس اليوم', priority: 7 },
+            pest: { category: 'safety', badge: 'حلول آمنة', eta: 'خلال 2-4 ساعات', priority: 5 },
+            amc: { category: 'contracts', badge: 'توفير طويل الأجل', eta: 'خطة مخصصة', priority: 9 },
+            civil: { category: 'finishing', badge: 'فريق متعدد التخصص', eta: 'حسب نطاق العمل', priority: 10 },
+            security: { category: 'safety', badge: 'أنظمة ذكية', eta: 'خلال 2-4 ساعات', priority: 4 }
+        };
+
+        let servicesState = {
+            query: '',
+            category: 'all',
+            sort: 'recommended'
+        };
+
+        const PROJECT_META = {
+            "villa-khalifa": { featured: true, score: 1, durationDays: 21, badge: "تحسين كفاءة 40%" },
+            "office-reem": { featured: true, score: 2, durationDays: 30, badge: "تسليم قبل الموعد" },
+            "warehouse-mussafah": { featured: false, score: 6, durationDays: 10, badge: "تحمل صناعي عالٍ" },
+            "mall-ac": { featured: true, score: 3, durationDays: 60, badge: "توفير طاقة 25%" },
+            "tower-electrical": { featured: false, score: 5, durationDays: 28, badge: "تحكم ذكي كامل" },
+            "hotel-plumbing": { featured: false, score: 8, durationDays: 42, badge: "تنفيذ دون تعطيل" },
+            "villa-painting": { featured: false, score: 9, durationDays: 14, badge: "حماية طويلة الأمد" },
+            "gym-fitout": { featured: false, score: 7, durationDays: 21, badge: "جاهزية تشغيل كاملة" },
+            "clinic-maintenance": { featured: true, score: 4, durationDays: 365, badge: "عقد مستمر" },
+            "showroom-lighting": { featured: false, score: 10, durationDays: 7, badge: "إبراز بصري احترافي" },
+            "pool-maintenance": { featured: false, score: 11, durationDays: 14, badge: "إعادة تأهيل كامل" }
+        };
+
+        let projectsState = {
+            query: '',
+            category: 'all',
+            sort: 'recommended'
+        };
+
         // Data - Projects
         const PROJECTS = [
             {
@@ -159,12 +198,45 @@
             { q: "هل تقدمون خدمات الطوارئ؟", a: "نعم، نقدم دعم طوارئ على مدار 24/7 للمشاكل الحرجة مثل تسربات المياه الكبيرة أو انقطاع الكهرباء." },
             { q: "هل الفنيون لديكم معتمدون؟", a: "بالتأكيد. جميع فنيينا مدربون ومعتمدون ولديهم خبرة في معايير السلامة في الإمارات." },
             { q: "ما هي المناطق التي تغطونها؟", a: "نخدم بشكل أساسي أبوظبي (بما في ذلك مدينة خليفة، جزيرة ياس، جزيرة الريم) ودبي." },
-            { q: "كيف يمكنني الحصول على عرض سعر؟", a: "يمكنك الاتصال بنا مباشرة، أو إرسال رسالة واتساب، أو ملء نموذج الاتصال على هذا الموقع." }
+            { q: "كيف يمكنني الحصول على عرض سعر؟", a: "يمكنك الاتصال بنا مباشرة، أو إرسال رسالة واتساب، أو ملء نموذج الاتصال على هذا الموقع." },
+            { q: "هل المعاينة الأولية مجانية؟", a: "في معظم الحالات نعم، نقدم معاينة أولية مجانية داخل مناطق الخدمة لتحديد نطاق العمل بدقة." },
+            { q: "كم يستغرق وصول الفني بعد الحجز؟", a: "عادة خلال 45 إلى 90 دقيقة حسب نوع الخدمة وموقعك وحجم الطلبات الحالية." },
+            { q: "هل توفرون ضماناً بعد تنفيذ الخدمة؟", a: "نعم، يتم تقديم ضمان حسب نوع الخدمة وقطع الغيار المستخدمة، ويتم توضيحه قبل بدء التنفيذ." },
+            { q: "هل يمكن تنفيذ الصيانة في العطلات ونهاية الأسبوع؟", a: "نعم، لدينا فرق عمل مرنة متاحة خلال عطلات نهاية الأسبوع وخارج أوقات الدوام للحالات الخاصة." },
+            { q: "هل توفرون عقود صيانة للشركات والمباني؟", a: "نعم، نوفر عقود صيانة دورية مخصصة للشركات، الفلل، الأبراج، والمرافق التجارية." },
+            { q: "ما طرق الدفع المتاحة؟", a: "نقبل التحويل البنكي، النقد، وبعض وسائل الدفع الإلكتروني حسب طبيعة المشروع." },
+            { q: "هل يمكن طلب أكثر من خدمة في نفس الزيارة؟", a: "نعم، يمكن دمج أكثر من خدمة مثل التكييف والكهرباء والسباكة في زيارة واحدة لتوفير الوقت والتكلفة." },
+            { q: "هل تستخدمون قطع غيار أصلية؟", a: "نحرص على استخدام قطع غيار أصلية أو معتمدة عالية الجودة، ونوضح خيارات القطع قبل التركيب." }
         ];
+
+        function setupImageFallbacks(scope = document) {
+            const fallbackSrc = 'assets/images/sb-logo.png';
+            const imgs = scope.querySelectorAll('img');
+
+            imgs.forEach(img => {
+                if (img.dataset.fallbackBound === '1') return;
+                img.dataset.fallbackBound = '1';
+
+                img.addEventListener('error', () => {
+                    if (img.dataset.fallbackApplied === '1') return;
+                    img.dataset.fallbackApplied = '1';
+                    img.src = fallbackSrc;
+                    img.classList.add('object-contain', 'bg-slate-100', 'p-2');
+                });
+            });
+        }
 
         // --- Core Functions ---
 
-        function renderServiceCard(service) {
+        function renderServiceCard(service, showMeta = false) {
+            const meta = SERVICE_META[service.id] || { badge: '', eta: '', priority: 99 };
+            const metaBadge = showMeta
+                ? `<span class="inline-flex items-center gap-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 text-[11px] font-bold">${meta.badge}</span>`
+                : '';
+            const etaLine = showMeta
+                ? `<p class="text-xs text-slate-500 mt-3">متوسط التنفيذ: <span class="font-bold text-slate-700">${meta.eta}</span></p>`
+                : '';
+
             return `
             <div class="bg-white rounded-xl shadow-lg shadow-slate-200/50 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group border border-slate-100">
                 <div class="h-52 overflow-hidden relative">
@@ -172,6 +244,7 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 <div class="p-6">
+                    <div class="mb-3">${metaBadge}</div>
                     <div class="flex items-center gap-3 mb-3 text-blue-600">
                         <div class="bg-blue-50 p-2 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
                             <i data-lucide="${service.icon}" class="w-6 h-6"></i>
@@ -179,6 +252,7 @@
                         <h3 class="font-bold text-xl text-slate-900 group-hover:text-blue-700 transition-colors">${service.title}</h3>
                     </div>
                     <p class="text-slate-600 mb-6 text-sm leading-relaxed">${service.shortDesc}</p>
+                    ${etaLine}
                     <button onclick="openServiceDetail('${service.id}')" class="w-full py-2.5 rounded-lg bg-slate-50 text-blue-600 font-bold hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center gap-2">
                         اقرأ المزيد <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     </button>
@@ -186,14 +260,108 @@
             </div>`;
         }
 
+        function getFilteredServices() {
+            const q = servicesState.query.trim().toLowerCase();
+
+            let list = SERVICES.filter(service => {
+                const meta = SERVICE_META[service.id] || { category: 'all' };
+                const matchesCategory = servicesState.category === 'all' || meta.category === servicesState.category;
+                if (!matchesCategory) return false;
+
+                if (!q) return true;
+                const haystack = [
+                    service.title,
+                    service.shortDesc,
+                    service.fullDesc,
+                    ...(service.features || [])
+                ].join(' ').toLowerCase();
+                return haystack.includes(q);
+            });
+
+            if (servicesState.sort === 'name-asc') {
+                list.sort((a, b) => a.title.localeCompare(b.title, 'ar'));
+            } else if (servicesState.sort === 'name-desc') {
+                list.sort((a, b) => b.title.localeCompare(a.title, 'ar'));
+            } else {
+                list.sort((a, b) => {
+                    const aP = (SERVICE_META[a.id]?.priority) || 99;
+                    const bP = (SERVICE_META[b.id]?.priority) || 99;
+                    return aP - bP;
+                });
+            }
+
+            return list;
+        }
+
+        function renderServicesGrid() {
+            const allGrid = document.getElementById('all-services-grid');
+            if (!allGrid) return;
+
+            const resultCountEl = document.getElementById('services-results-count');
+            const totalCountEl = document.getElementById('services-total-count');
+            const emptyState = document.getElementById('services-empty-state');
+
+            const filtered = getFilteredServices();
+            allGrid.innerHTML = filtered.map(service => renderServiceCard(service, true)).join('');
+
+            if (resultCountEl) resultCountEl.textContent = String(filtered.length);
+            if (totalCountEl) totalCountEl.textContent = String(SERVICES.length);
+
+            if (emptyState) {
+                emptyState.classList.toggle('hidden', filtered.length > 0);
+            }
+
+            lucide.createIcons();
+            setupImageFallbacks();
+        }
+
+        function setupServicesInteractions() {
+            const searchInput = document.getElementById('services-search');
+            const sortSelect = document.getElementById('services-sort');
+            const chips = document.querySelectorAll('.services-filter-chip');
+
+            if (!searchInput || !sortSelect || chips.length === 0) {
+                return;
+            }
+
+            searchInput.addEventListener('input', (event) => {
+                servicesState.query = event.target.value || '';
+                renderServicesGrid();
+            });
+
+            sortSelect.addEventListener('change', (event) => {
+                servicesState.sort = event.target.value;
+                renderServicesGrid();
+            });
+
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    chips.forEach(btn => btn.classList.remove('is-active'));
+                    chip.classList.add('is-active');
+                    servicesState.category = chip.dataset.category || 'all';
+                    renderServicesGrid();
+                });
+            });
+
+            renderServicesGrid();
+        }
+
         function renderProjectCard(project) {
+            const meta = PROJECT_META[project.id] || { featured: false, badge: '', score: 99 };
+            const featuredTag = meta.featured
+                ? '<span class="text-[11px] font-bold bg-emerald-500/90 text-white px-2 py-1 rounded-full">مشروع مميز</span>'
+                : '';
             return `
             <div class="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer h-96" onclick="openProjectDetail('${project.id}')">
                 <img src="${project.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent flex flex-col justify-end p-8 text-white">
-                    <span class="text-amber-400 text-xs font-bold mb-2 uppercase tracking-widest px-2 py-1 bg-white/10 backdrop-blur-md rounded w-fit">${project.category}</span>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-amber-400 text-xs font-bold uppercase tracking-widest px-2 py-1 bg-white/10 backdrop-blur-md rounded w-fit">${project.category}</span>
+                        ${featuredTag}
+                    </div>
                     <h3 class="text-2xl font-bold mb-2 group-hover:text-blue-300 transition-colors">${project.title}</h3>
                     <p class="text-slate-300 text-sm flex items-center gap-1.5 mb-4"><i data-lucide="map-pin" class="w-4 h-4 text-red-400"></i> ${project.location}</p>
+                    <p class="text-xs text-blue-100/90 mb-4 bg-white/10 rounded-full px-3 py-1 w-fit">${meta.badge}</p>
                     
                     <div class="flex items-center gap-2 text-sm font-bold text-blue-300 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-75">
                         عرض تفاصيل المشروع <i data-lucide="arrow-left" class="w-4 h-4"></i>
@@ -202,15 +370,98 @@
             </div>`;
         }
 
+        function getFilteredProjects() {
+            const q = projectsState.query.trim().toLowerCase();
+
+            let list = PROJECTS.filter(project => {
+                const matchesCategory = projectsState.category === 'all' || project.category === projectsState.category;
+                if (!matchesCategory) return false;
+
+                if (!q) return true;
+                const content = [
+                    project.title,
+                    project.location,
+                    project.category,
+                    project.challenge,
+                    project.solution,
+                    project.result,
+                    project.stats?.type || ''
+                ].join(' ').toLowerCase();
+                return content.includes(q);
+            });
+
+            if (projectsState.sort === 'name-asc') {
+                list.sort((a, b) => a.title.localeCompare(b.title, 'ar'));
+            } else if (projectsState.sort === 'name-desc') {
+                list.sort((a, b) => b.title.localeCompare(a.title, 'ar'));
+            } else if (projectsState.sort === 'duration-fast') {
+                list.sort((a, b) => ((PROJECT_META[a.id]?.durationDays || 999) - (PROJECT_META[b.id]?.durationDays || 999)));
+            } else {
+                list.sort((a, b) => ((PROJECT_META[a.id]?.score || 99) - (PROJECT_META[b.id]?.score || 99)));
+            }
+
+            return list;
+        }
+
+        function renderProjectsGrid() {
+            const grid = document.getElementById('projects-grid');
+            if (!grid) return;
+
+            const resultsCount = document.getElementById('projects-results-count');
+            const totalCount = document.getElementById('projects-total-count');
+            const emptyState = document.getElementById('projects-empty-state');
+
+            const list = getFilteredProjects();
+            grid.innerHTML = list.map(renderProjectCard).join('');
+
+            if (resultsCount) resultsCount.textContent = String(list.length);
+            if (totalCount) totalCount.textContent = String(PROJECTS.length);
+            if (emptyState) emptyState.classList.toggle('hidden', list.length > 0);
+
+            lucide.createIcons();
+            setupImageFallbacks();
+        }
+
+        function setupProjectsInteractions() {
+            const searchInput = document.getElementById('projects-search');
+            const sortSelect = document.getElementById('projects-sort');
+            const chips = document.querySelectorAll('.projects-filter-chip');
+
+            if (!searchInput || !sortSelect || chips.length === 0) {
+                return;
+            }
+
+            searchInput.addEventListener('input', (event) => {
+                projectsState.query = event.target.value || '';
+                renderProjectsGrid();
+            });
+
+            sortSelect.addEventListener('change', (event) => {
+                projectsState.sort = event.target.value;
+                renderProjectsGrid();
+            });
+
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    chips.forEach(btn => btn.classList.remove('is-active'));
+                    chip.classList.add('is-active');
+                    projectsState.category = chip.dataset.category || 'all';
+                    renderProjectsGrid();
+                });
+            });
+
+            renderProjectsGrid();
+        }
+
         function init() {
             const homeGrid = document.getElementById('home-services-grid');
             if(homeGrid) homeGrid.innerHTML = SERVICES.slice(0, 6).map(renderServiceCard).join('');
 
-            const allGrid = document.getElementById('all-services-grid');
-            if(allGrid) allGrid.innerHTML = SERVICES.map(renderServiceCard).join('');
+            renderServicesGrid();
+            setupServicesInteractions();
 
-            const projectsGrid = document.getElementById('projects-grid');
-            if(projectsGrid) projectsGrid.innerHTML = PROJECTS.map(renderProjectCard).join('');
+            renderProjectsGrid();
+            setupProjectsInteractions();
 
             const faqList = document.getElementById('faq-list');
             if(faqList) faqList.innerHTML = FAQS.map(faq => `
@@ -224,6 +475,7 @@
 
             lucide.createIcons();
             startHeroSlider();
+            setupImageFallbacks();
         }
 
         // Hero Image Slider Logic
@@ -328,6 +580,7 @@
                 </div>
             `;
             lucide.createIcons();
+            setupImageFallbacks();
             navigateTo('service-detail');
         }
 
@@ -393,6 +646,7 @@
                 </div>
             `;
             lucide.createIcons();
+            setupImageFallbacks();
             navigateTo('project-detail');
         }
 
@@ -407,6 +661,8 @@
 
             const submitBtn = document.getElementById('contact-submit');
             const feedback = document.getElementById('contact-form-feedback');
+            const msgInput = document.getElementById('contact-message');
+            const msgCounter = document.getElementById('contact-message-counter');
 
             const serviceLabels = {
                 ac: 'صيانة التكييف',
@@ -429,6 +685,14 @@
                 }
             };
 
+            if (msgInput && msgCounter) {
+                const syncCounter = () => {
+                    msgCounter.textContent = `${msgInput.value.length} / 800`;
+                };
+                syncCounter();
+                msgInput.addEventListener('input', syncCounter);
+            }
+
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
 
@@ -436,8 +700,14 @@
                 const phone = form.elements.phone.value.trim();
                 const service = form.elements.service.value;
                 const message = form.elements.message.value.trim();
+                const email = (form.elements.email?.value || '').trim();
+                const preferred = form.elements.preferred?.value || 'phone';
+                const preferredTime = form.elements.preferredTime?.value || 'أي وقت';
+                const urgent = Boolean(form.elements.urgent?.checked);
+                const consent = Boolean(form.elements.consent?.checked);
 
                 const phoneRegex = /^\+?[0-9\s-]{8,20}$/;
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!name || name.length < 2) {
                     setFeedback('يرجى إدخال الاسم بشكل صحيح (حرفان على الأقل).', 'error');
                     return;
@@ -454,6 +724,14 @@
                     setFeedback('يرجى كتابة رسالة أوضح (10 أحرف على الأقل).', 'error');
                     return;
                 }
+                if (email && !emailRegex.test(email)) {
+                    setFeedback('يرجى إدخال بريد إلكتروني صحيح أو تركه فارغاً.', 'error');
+                    return;
+                }
+                if (!consent) {
+                    setFeedback('يرجى الموافقة على سياسة التواصل قبل الإرسال.', 'error');
+                    return;
+                }
 
                 if (submitBtn) {
                     submitBtn.disabled = true;
@@ -461,11 +739,21 @@
                 }
 
                 const serviceText = serviceLabels[service] || service;
+                const preferredMap = {
+                    phone: 'اتصال هاتفي',
+                    whatsapp: 'واتساب',
+                    email: 'بريد إلكتروني'
+                };
+                const preferredText = preferredMap[preferred] || 'اتصال هاتفي';
                 const waText =
 `طلب جديد من الموقع
 الاسم: ${name}
 الهاتف: ${phone}
+البريد الإلكتروني: ${email || 'غير مضاف'}
 الخدمة: ${serviceText}
+طريقة التواصل المفضلة: ${preferredText}
+الوقت المناسب للتواصل: ${preferredTime}
+حالة الطلب: ${urgent ? 'طارئ' : 'عادي'}
 الرسالة: ${message}`;
 
                 setFeedback('تم تجهيز رسالتك بنجاح. سيتم تحويلك إلى واتساب لإرسال الطلب مباشرة.', 'success');

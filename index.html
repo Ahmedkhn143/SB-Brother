@@ -58,7 +58,7 @@
                     class="brand-lockup brand-lockup-compact group flex items-center gap-2 cursor-pointer select-none notranslate shrink-0"
                     translate="no">
                     <div class="logo-badge logo-badge-premium">
-                        <img src="assets/images/sb-logo.png" alt="Seven Brothers Electromechanical" class="site-logo-navbar w-auto h-[60px] object-contain group-hover:scale-[1.05] transition-transform duration-300" loading="eager" decoding="async">
+                        <img src="assets/images/sb-logo.png" alt="Seven Brothers Electromechanical" class="site-logo-navbar w-auto h-[52px] object-contain group-hover:scale-[1.05] transition-transform duration-300" loading="eager" decoding="async">
                     </div>
                     <div class="brand-text-group flex flex-col leading-tight" dir="ltr">
                         <span class="brand-title">Seven Brothers</span>
@@ -475,7 +475,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <img src="https://images.unsplash.com/photo-1531973576160-7125cd663d86?auto=format&fit=crop&q=80&w=400"
                             class="rounded-xl shadow-lg w-full h-64 object-cover transform translate-y-8">
-                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=400"
+                        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80&w=400"
                             class="rounded-xl shadow-lg w-full h-64 object-cover">
                     </div>
                 </div>
@@ -523,12 +523,69 @@
                 </div>
                 <div class="container mx-auto px-6 relative z-10 text-center">
                     <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">خدماتنا</h1>
-                    <p class="text-xl text-slate-300">حلول شاملة واحترافية لجميع احتياجاتك.</p>
+                    <p class="text-xl text-slate-300 max-w-3xl mx-auto">حلول شاملة واحترافية مصممة لاحتياجك الفعلي مع سرعة استجابة وضمان جودة على التنفيذ.</p>
                 </div>
             </div>
             <div class="container mx-auto px-6 pb-20">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                        <p class="text-slate-500 text-xs mb-1">إجمالي الخدمات</p>
+                        <p id="services-total-count" class="text-2xl font-extrabold text-slate-900">0</p>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                        <p class="text-slate-500 text-xs mb-1">متوسط وقت الاستجابة</p>
+                        <p class="text-2xl font-extrabold text-blue-700">60 دقيقة</p>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                        <p class="text-slate-500 text-xs mb-1">مستوى الرضا</p>
+                        <p class="text-2xl font-extrabold text-emerald-600">4.9/5</p>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-2xl p-5 md:p-6 shadow-sm mb-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-center">
+                        <div class="relative lg:col-span-1">
+                            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute right-3 top-3.5"></i>
+                            <input id="services-search" type="search" placeholder="ابحث عن خدمة..."
+                                class="w-full pr-10 pl-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 outline-none transition">
+                        </div>
+
+                        <div class="lg:col-span-1">
+                            <select id="services-sort"
+                                class="w-full py-3 px-4 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 outline-none transition cursor-pointer">
+                                <option value="recommended">الترتيب: الأنسب أولاً</option>
+                                <option value="name-asc">الاسم: أ - ي</option>
+                                <option value="name-desc">الاسم: ي - أ</option>
+                            </select>
+                        </div>
+
+                        <div class="lg:col-span-1 text-sm text-slate-600 text-right md:text-left">
+                            <span>عدد النتائج:</span>
+                            <span id="services-results-count" class="font-bold text-blue-700">0</span>
+                        </div>
+                    </div>
+
+                    <div id="services-filter-chips" class="mt-4 flex flex-wrap gap-2">
+                        <button class="services-filter-chip is-active" data-category="all">الكل</button>
+                        <button class="services-filter-chip" data-category="cooling">التكييف والتبريد</button>
+                        <button class="services-filter-chip" data-category="electrical">الأعمال الكهربائية</button>
+                        <button class="services-filter-chip" data-category="plumbing">السباكة والمياه</button>
+                        <button class="services-filter-chip" data-category="finishing">تشطيبات وتنظيف</button>
+                        <button class="services-filter-chip" data-category="safety">الحماية والمراقبة</button>
+                        <button class="services-filter-chip" data-category="contracts">العقود والصيانة الدورية</button>
+                    </div>
+                </div>
+
                 <div id="all-services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Injected by JS -->
+                </div>
+
+                <div id="services-empty-state" class="hidden text-center mt-12 bg-slate-50 border border-slate-200 rounded-2xl p-8">
+                    <div class="w-14 h-14 rounded-full bg-white border border-slate-200 flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="search-x" class="w-6 h-6 text-slate-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">لا توجد نتائج مطابقة</h3>
+                    <p class="text-slate-500">جرّب كلمة بحث مختلفة أو اختر تصنيفاً آخر.</p>
                 </div>
             </div>
         </div>
@@ -546,12 +603,69 @@
                 </div>
                 <div class="container mx-auto px-6 relative z-10 text-center">
                     <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">مشاريعنا</h1>
-                    <p class="text-xl text-slate-300">قصص نجاح ومشاريع تم إنجازها بإتقان.</p>
+                    <p class="text-xl text-slate-300 max-w-3xl mx-auto">قصص نجاح موثقة من مشاريع سكنية وتجارية وصناعية أنجزناها بجودة هندسية عالية وفي الوقت المحدد.</p>
                 </div>
             </div>
             <div class="container mx-auto px-6 pb-20">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                        <p class="text-slate-500 text-xs mb-1">إجمالي المشاريع</p>
+                        <p id="projects-total-count" class="text-2xl font-extrabold text-slate-900">0</p>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                        <p class="text-slate-500 text-xs mb-1">نسبة التسليم بالموعد</p>
+                        <p class="text-2xl font-extrabold text-blue-700">98%</p>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                        <p class="text-slate-500 text-xs mb-1">معدل رضا العملاء</p>
+                        <p class="text-2xl font-extrabold text-emerald-600">4.9/5</p>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-2xl p-5 md:p-6 shadow-sm mb-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-center">
+                        <div class="relative lg:col-span-1">
+                            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute right-3 top-3.5"></i>
+                            <input id="projects-search" type="search" placeholder="ابحث باسم المشروع أو الموقع..."
+                                class="w-full pr-10 pl-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 outline-none transition">
+                        </div>
+
+                        <div class="lg:col-span-1">
+                            <select id="projects-sort"
+                                class="w-full py-3 px-4 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 outline-none transition cursor-pointer">
+                                <option value="recommended">الترتيب: مشاريع مميزة</option>
+                                <option value="name-asc">الاسم: أ - ي</option>
+                                <option value="name-desc">الاسم: ي - أ</option>
+                                <option value="duration-fast">المدة: الأسرع أولاً</option>
+                            </select>
+                        </div>
+
+                        <div class="lg:col-span-1 text-sm text-slate-600 text-right md:text-left">
+                            <span>عدد النتائج:</span>
+                            <span id="projects-results-count" class="font-bold text-blue-700">0</span>
+                        </div>
+                    </div>
+
+                    <div id="projects-filter-chips" class="mt-4 flex flex-wrap gap-2">
+                        <button class="projects-filter-chip is-active" data-category="all">الكل</button>
+                        <button class="projects-filter-chip" data-category="سكني">سكني</button>
+                        <button class="projects-filter-chip" data-category="تجاري">تجاري</button>
+                        <button class="projects-filter-chip" data-category="صناعي">صناعي</button>
+                        <button class="projects-filter-chip" data-category="ضيافة">ضيافة</button>
+                        <button class="projects-filter-chip" data-category="طبي">طبي</button>
+                    </div>
+                </div>
+
                 <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Projects injected by JS -->
+                </div>
+
+                <div id="projects-empty-state" class="hidden text-center mt-12 bg-slate-50 border border-slate-200 rounded-2xl p-8">
+                    <div class="w-14 h-14 rounded-full bg-white border border-slate-200 flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="folder-search" class="w-6 h-6 text-slate-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">لا توجد مشاريع مطابقة</h3>
+                    <p class="text-slate-500">غيّر الكلمات المفتاحية أو جرّب فئة أخرى من المشاريع.</p>
                 </div>
             </div>
         </div>
@@ -599,6 +713,21 @@
                         <div class="absolute bottom-10 left-10 w-20 h-20 bg-blue-500 rounded-full opacity-20"></div>
 
                         <h3 class="text-2xl font-bold mb-8 relative z-10">معلومات الاتصال</h3>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-8 relative z-10">
+                            <div class="bg-white/10 border border-white/15 rounded-lg px-3 py-2 text-center">
+                                <p class="text-[11px] text-blue-200">زمن الاستجابة</p>
+                                <p class="font-extrabold text-white text-sm">60 دقيقة</p>
+                            </div>
+                            <div class="bg-white/10 border border-white/15 rounded-lg px-3 py-2 text-center">
+                                <p class="text-[11px] text-blue-200">تقييم العملاء</p>
+                                <p class="font-extrabold text-white text-sm">4.9 / 5</p>
+                            </div>
+                            <div class="bg-white/10 border border-white/15 rounded-lg px-3 py-2 text-center">
+                                <p class="text-[11px] text-blue-200">تغطية الخدمة</p>
+                                <p class="font-extrabold text-white text-sm">أبوظبي ودبي</p>
+                            </div>
+                        </div>
 
                         <div class="space-y-8 relative z-10">
                             <div class="flex items-start gap-4">
@@ -663,6 +792,10 @@
                         <p class="text-slate-500 mb-8">هل لديك استفسار أو تحتاج إلى عرض سعر؟ املأ النموذج أدناه وسنرد
                             عليك في أقرب وقت.</p>
 
+                        <div class="mb-6 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+                            عادةً نرد خلال أقل من ساعة في أوقات العمل. للحالات الطارئة يمكنك تحديد خيار "حالة طارئة" داخل النموذج.
+                        </div>
+
                         <div id="contact-form-feedback" class="hidden mb-6 rounded-lg border px-4 py-3 text-sm font-medium"
                             role="status" aria-live="polite"></div>
 
@@ -717,14 +850,76 @@
                                 </div>
                             </div>
 
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="group">
+                                    <label for="contact-email"
+                                        class="block text-sm font-medium text-slate-700 mb-2 group-focus-within:text-blue-600 transition">البريد الإلكتروني (اختياري)</label>
+                                    <div class="relative">
+                                        <i data-lucide="mail"
+                                            class="absolute right-3 top-3.5 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition"></i>
+                                        <input id="contact-email" name="email" type="email" maxlength="120"
+                                            class="w-full pr-10 pl-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition bg-slate-50 focus:bg-white"
+                                            placeholder="example@email.com" dir="ltr">
+                                    </div>
+                                </div>
+
+                                <div class="group">
+                                    <label for="contact-preferred"
+                                        class="block text-sm font-medium text-slate-700 mb-2 group-focus-within:text-blue-600 transition">طريقة التواصل المفضلة</label>
+                                    <div class="relative">
+                                        <i data-lucide="messages-square"
+                                            class="absolute right-3 top-3.5 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition"></i>
+                                        <select id="contact-preferred" name="preferred"
+                                            class="w-full pr-10 pl-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition bg-slate-50 focus:bg-white appearance-none cursor-pointer">
+                                            <option value="phone">اتصال هاتفي</option>
+                                            <option value="whatsapp">واتساب</option>
+                                            <option value="email">بريد إلكتروني</option>
+                                        </select>
+                                        <i data-lucide="chevron-down"
+                                            class="absolute left-3 top-3.5 w-5 h-5 text-slate-400 pointer-events-none"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="group">
+                                    <label for="contact-time"
+                                        class="block text-sm font-medium text-slate-700 mb-2 group-focus-within:text-blue-600 transition">الوقت المناسب للتواصل</label>
+                                    <select id="contact-time" name="preferredTime"
+                                        class="w-full py-3 px-4 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition bg-slate-50 focus:bg-white cursor-pointer">
+                                        <option value="أي وقت">أي وقت</option>
+                                        <option value="صباحاً 8-12">صباحاً 8-12</option>
+                                        <option value="ظهراً 12-4">ظهراً 12-4</option>
+                                        <option value="مساءً 4-9">مساءً 4-9</option>
+                                    </select>
+                                </div>
+
+                                <label for="contact-urgent"
+                                    class="flex items-center justify-between gap-3 border border-slate-200 bg-slate-50 rounded-lg px-4 py-3 mt-7 cursor-pointer hover:border-blue-300 transition">
+                                    <span class="text-sm font-medium text-slate-700">حالة طارئة وتحتاج استجابة عاجلة</span>
+                                    <input id="contact-urgent" name="urgent" type="checkbox"
+                                        class="w-4 h-4 rounded border-slate-300 text-red-600 focus:ring-red-500">
+                                </label>
+                            </div>
+
                             <div class="group">
                                 <label for="contact-message"
                                     class="block text-sm font-medium text-slate-700 mb-2 group-focus-within:text-blue-600 transition">الرسالة</label>
                                 <textarea id="contact-message" name="message" rows="4" minlength="10" maxlength="800"
                                     class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition bg-slate-50 focus:bg-white resize-none"
                                     placeholder="كيف يمكننا مساعدتك؟" required></textarea>
-                                <p class="mt-2 text-xs text-slate-400">سنستخدم المعلومات فقط للتواصل بخصوص طلبك.</p>
+                                <div class="mt-2 flex items-center justify-between text-xs">
+                                    <p class="text-slate-400">سنستخدم المعلومات فقط للتواصل بخصوص طلبك.</p>
+                                    <p id="contact-message-counter" class="text-slate-400">0 / 800</p>
+                                </div>
                             </div>
+
+                            <label for="contact-consent"
+                                class="flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3 cursor-pointer hover:border-blue-300 transition">
+                                <input id="contact-consent" name="consent" type="checkbox" required
+                                    class="mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                                <span class="text-sm text-slate-700">أوافق على استخدام بياناتي للتواصل بخصوص هذا الطلب فقط.</span>
+                            </label>
 
                             <button id="contact-submit" type="submit"
                                 class="w-full bg-blue-600 text-white py-4 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 group transform active:scale-[0.98]">
@@ -785,7 +980,7 @@
             </div>
 
             <!-- ─── TRUST BADGES ─── -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-16">
+            <div class="footer-trust-grid grid grid-cols-1 sm:grid-cols-3 gap-4 mb-16">
                 <div class="footer-trust-badge group">
                     <div class="footer-trust-badge-icon">
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
