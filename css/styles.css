@@ -289,13 +289,15 @@ body {
 }
 
 .footer-trust-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     justify-items: center;
 }
 
 .footer-trust-grid .footer-trust-badge {
-    width: 100%;
-    max-width: 340px;
-    min-height: 88px;
+    width: fit-content;
+    min-height: 0;
     padding: 0.95rem 1rem;
 }
 
@@ -326,23 +328,23 @@ body {
 
 @media (max-width: 640px) {
     .footer-trust-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        flex-direction: column;
+        align-items: center;
     }
 
     .footer-trust-grid .footer-trust-badge {
-        max-width: 100%;
+        width: fit-content;
+        max-width: calc(100% - 1rem);
     }
 
     .footer-trust-grid .footer-trust-badge:nth-child(3) {
-        grid-column: span 2;
-        max-width: 340px;
-        justify-self: center;
+        max-width: calc(100% - 1rem);
     }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
     .footer-trust-grid .footer-trust-badge {
-        max-width: 300px;
+        width: fit-content;
     }
 }
 
@@ -512,11 +514,50 @@ body {
     overflow: hidden;
 }
 
+.footer-brand-col {
+    text-align: right;
+}
+
+.footer-brand-row {
+    width: fit-content;
+    margin-left: auto;
+    justify-content: flex-end;
+}
+
+.footer-brand-text {
+    text-align: left;
+}
+
+.footer-brand-social {
+    width: fit-content;
+    margin-left: auto;
+    justify-content: flex-end;
+}
+
 /* ─── Brand Description ─── */
 .footer-brand-desc {
-    border-right: 3px solid;
+    border-left: 3px solid;
+    border-right: 0;
     border-image: linear-gradient(to bottom, #2563eb, #06b6d4) 1;
-    padding-right: 0.85rem;
+    padding-left: 0.85rem;
+    padding-right: 0;
+    margin-left: auto;
+    max-width: 40rem;
+    text-align: right;
+}
+
+@media (max-width: 640px) {
+    .footer-brand-row {
+        margin-right: 0;
+    }
+
+    .footer-brand-social {
+        margin-right: 0;
+    }
+
+    .footer-brand-desc {
+        max-width: 100%;
+    }
 }
 
 /* ─── Bottom Bar ─── */
@@ -828,6 +869,101 @@ html[dir="rtl"] .brand-lockup {
     border: 2px solid transparent;
     background: linear-gradient(white, white) padding-box,
         linear-gradient(to right, #3b82f6, #8b5cf6) border-box;
+}
+
+/* Contact Section Mobile Refinements */
+.contact-info-content {
+    min-width: 0;
+    text-align: right;
+}
+
+html[dir="rtl"] .contact-info-item {
+    direction: rtl;
+}
+
+.contact-phone-link {
+    display: inline-block;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+.contact-email-link {
+    display: inline-block;
+    direction: ltr;
+    unicode-bidi: plaintext;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.65;
+}
+
+.contact-meta {
+    flex-wrap: wrap;
+    line-height: 1.45;
+    justify-content: flex-start;
+}
+
+.contact-map-cta span {
+    text-align: center;
+    line-height: 1.35;
+}
+
+@media (max-width: 768px) {
+    .contact-info-panel {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .contact-form-panel {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .contact-info-stats {
+        grid-template-columns: 1fr;
+        gap: 0.55rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .contact-info-list > :not([hidden]) ~ :not([hidden]) {
+        margin-top: 1.1rem;
+    }
+
+    .contact-info-item {
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .contact-info-icon {
+        width: 2.65rem;
+        height: 2.65rem;
+    }
+
+    .contact-info-content h4 {
+        font-size: 1rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .contact-phone-link {
+        font-size: 1.15rem;
+    }
+
+    .contact-meta {
+        font-size: 0.82rem;
+    }
+
+    .contact-map-cta {
+        margin-top: 1.6rem;
+        height: 8.75rem;
+    }
+
+    .contact-map-cta span {
+        font-size: 0.88rem;
+        padding: 0.55rem 0.75rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .contact-phone-link {
+        font-size: 1.02rem;
+    }
 }
 
 /* Enhanced Mobile Responsiveness */
