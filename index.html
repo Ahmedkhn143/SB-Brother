@@ -8,6 +8,21 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0056b3',
+                            dark: '#0f172a',
+                            accent: '#f59e0b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -1237,9 +1252,8 @@
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
-
-    <script src="js/script.js"></script>
+    <!-- JavaScript Modules -->
+    <script type="module" src="js/app.js"></script>
 </body>
 
 </html>
