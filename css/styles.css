@@ -1,28 +1,21 @@
 :root {
-    /* Brand Colors */
-    --brand-blue: #0056b3;
-    --brand-blue-hover: #004494;
-    --brand-blue-light: #eff6ff;
-    --brand-blue-border: #93c5fd;
+    --brand-blue: #2563eb;
+    --brand-blue-dark: #1d4ed8;
+    --brand-blue-light: #60a5fa;
     --brand-dark: #0f172a;
     --brand-accent: #f59e0b;
-    --brand-emerald: #10b981;
-    
-    /* Surface Colors */
-    --surface-50: #f8fafc;
-    --surface-100: #f1f5f9;
-    --surface-200: #e2e8f0;
-    --surface-700: #334155;
-    --surface-800: #1e293b;
-    --surface-900: #0f172a;
-
-    /* Transitions */
-    --transition-fast: 0.2s ease;
-    --transition-std: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    --brand-accent-light: #fbbf24;
+    --text-slate-900: #0f172a;
+    --text-slate-700: #334155;
+    --text-slate-600: #475569;
+    --text-slate-500: #64748b;
+    --bg-slate-50: #f8fafc;
+    --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
     font-family: 'Tajawal', sans-serif;
+    background-color: var(--bg-slate-50);
 }
 
 .page-surface-image {
@@ -92,16 +85,16 @@ body {
     align-items: flex-start;
     font-size: 0.78rem;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--brand-dark);
     letter-spacing: 0.02em;
     white-space: nowrap;
     line-height: 1.15;
 }
-
-.brand-mobile-sub {
+ 
+ .brand-mobile-sub {
     font-size: 0.6rem;
     font-weight: 700;
-    color: #2563eb;
+    color: var(--brand-blue);
     letter-spacing: 0.04em;
     text-transform: uppercase;
     line-height: 1.2;
@@ -154,14 +147,14 @@ body {
 
 .brand-title {
     font-weight: 800;
-    color: #0f172a;
+    color: var(--brand-dark);
     font-size: 0.72rem;
     letter-spacing: 0.01em;
     line-height: 1.1;
 }
 
 .brand-subtitle {
-    color: #2563eb;
+    color: var(--brand-blue);
     font-weight: 700;
     font-size: 0.55rem;
     letter-spacing: 0.02em;
@@ -276,7 +269,7 @@ body {
 }
 
 .footer-cta-btn-primary {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-dark));
     color: #fff;
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
 }
@@ -453,9 +446,9 @@ body {
 }
 
 .footer-contact-item:hover .footer-contact-icon {
-    background: #2563eb;
+    background: var(--brand-blue);
     color: #fff;
-    border-color: #2563eb;
+    border-color: var(--brand-blue);
 }
 
 /* ─── Working Hours Card ─── */
@@ -612,9 +605,9 @@ body {
 }
 
 .footer-back-to-top:hover {
-    background: #2563eb;
+    background: var(--brand-blue);
     color: #fff;
-    border-color: #2563eb;
+    border-color: var(--brand-blue);
     box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
 }
 
@@ -815,7 +808,7 @@ html[dir="rtl"] .brand-lockup {
     bottom: -4px;
     left: 50%;
     background-color: var(--brand-blue);
-    transition: all var(--transition-std);
+    transition: all 0.3s ease;
     transform: translateX(-50%);
     border-radius: 2px;
 }
@@ -831,25 +824,25 @@ html[dir="rtl"] .brand-lockup {
 }
 
 .services-filter-chip {
-    border: 1px solid var(--surface-200);
-    background: var(--surface-50);
-    color: var(--surface-700);
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #334155;
     border-radius: 999px;
     padding: 0.45rem 0.9rem;
     font-size: 0.8rem;
     font-weight: 700;
-    transition: all var(--transition-fast);
+    transition: all 0.25s ease;
 }
 
 .services-filter-chip:hover {
-    border-color: var(--brand-blue-border);
+    border-color: #93c5fd;
     color: #1d4ed8;
-    background: var(--brand-blue-light);
+    background: #eff6ff;
 }
 
 .services-filter-chip.is-active {
-    border-color: #2563eb;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border-color: var(--brand-blue);
+    background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-dark));
     color: #fff;
     box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
 }
@@ -1126,7 +1119,7 @@ html {
 /* Focus Management for Chat */
 .chat-window button:focus,
 .chat-window input:focus {
-    outline: 2px solid #3b82f6;
+    outline: 2px solid var(--brand-blue);
     outline-offset: 2px;
 }
 
