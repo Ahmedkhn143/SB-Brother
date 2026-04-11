@@ -48,5 +48,26 @@ export function startHeroSlider() {
                 img.onload = () => { img.style.opacity = '1'; };
             }, 300);
         }
-    }, 2000);
+    }, 4000); // Increased interval for better UX
+}
+
+// ─── Scroll Reveal Observer ────────────────────────────────────
+
+export function setupScrollReveal() {
+    const reveals = document.querySelectorAll('.reveal');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('reveal-active');
+                // stop observing once revealed for performance
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+    });
+
+    reveals.forEach(el => observer.observe(el));
 }

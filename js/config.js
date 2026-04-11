@@ -13,9 +13,9 @@
 // ─── Gemini AI Configuration ───────────────────────────────────
 // To enable AI features, add your Gemini API key here.
 // For production: route requests through a backend proxy.
-export const API_KEY = "";
+export const API_KEY = "AIzaSyD0JTOw-M-Jmm3Upe73ctJeud21CkF9NDY";
 
-export const GEMINI_MODEL = "gemini-2.5-flash-preview-09-2025";
+export const GEMINI_MODEL = "gemini-1.5-flash";
 
 // ─── Company Contact Information ───────────────────────────────
 export const WHATSAPP_NUMBER = "971569098867";

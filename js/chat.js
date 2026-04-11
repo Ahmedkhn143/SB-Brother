@@ -122,7 +122,15 @@ export function sendChatMessage() {
         scrollToBottom();
     }).catch(err => {
         hideLoading(loadingId);
-        addMessageToUI('error', "عذراً، حدث خطأ. يرجى المحاولة لاحقاً.");
+        if (err.message === 'QUOTA_EXCEEDED') {
+            addMessageToUI('error-quota', ""); // Logic for special quota msg
+            // Fallback to offline mode for this specific request
+            getOfflineChatResponse(message).then(fallbackText => {
+                addMessageToUI('bot', fallbackText + "\n\n*(ملاحظة: هذا رد تلقائي بسبب وصول مفتاح الـ API للحد الأقصى)*");
+            });
+        } else {
+            addMessageToUI('error', "عذراً، حدث خطأ. يرجى المحاولة لاحقاً.");
+        }
     });
 }
 
@@ -143,12 +151,20 @@ function addMessageToUI(type, text) {
             </div>
         `;
     } else if (type === 'bot') {
-        // Ensure marked is loaded (fallback to plain text if not)
         const parsedText = window.marked ? marked.parse(text) : text;
         html = `
-            <div class="flex justify-start animate-fade-in mb-2">
+            <div class="flex justify-start animate-fade-in mb-2" dir="rtl">
                 <div class="message-bot-bubble text-sm max-w-[85%]">
                     ${parsedText}
+                </div>
+            </div>
+        `;
+    } else if (type === 'error-quota') {
+        html = `
+            <div class="flex justify-center mb-4 px-2">
+                <div class="bg-amber-50 text-amber-700 p-3 rounded-xl text-[11px] border border-amber-100 text-center leading-relaxed shadow-sm">
+                    ⚠️ **تنبيه مفتاح الـ API**: لقد وصلت للحد الأقصى لليوم. <br>
+                    سيتم تفعيل المساعد الذكي قريباً، وسأستخدم الردود التلقائية حالياً.
                 </div>
             </div>
         `;
@@ -234,15 +250,23 @@ async function callGeminiChat(userMessage) {
         systemInstruction: { parts: [{ text: systemPrompt }] }
     };
 
-    const result = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    });
+    try {
+        const result = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-    if (!result.ok) throw new Error('API Error');
-    const data = await result.json();
-    return data.candidates[0].content.parts[0].text;
+        if (result.status === 429) {
+            throw new Error('QUOTA_EXCEEDED');
+        }
+
+        if (!result.ok) throw new Error('API Error');
+        const data = await result.json();
+        return data.candidates[0].content.parts[0].text;
+    } catch (e) {
+        throw e;
+    }
 }
 
 // ─── Smart Offline Chat Responses (Enhanced Memory) ────────────

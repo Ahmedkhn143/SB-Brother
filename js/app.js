@@ -25,7 +25,7 @@
 
 // ─── Feature Modules ───────────────────────────────────────────
 import { SERVICES } from './data.js';
-import { setupImageFallbacks, startHeroSlider } from './utils.js';
+import { setupImageFallbacks, startHeroSlider, setupScrollReveal } from './utils.js';
 import { renderServiceCard, renderServicesGrid, setupServicesInteractions } from './services.js';
 import { renderProjectsGrid, setupProjectsInteractions } from './projects.js';
 import { renderFaqAccordion } from './faq.js';
@@ -58,6 +58,7 @@ function init() {
     lucide.createIcons();
     startHeroSlider();
     setupImageFallbacks();
+    setupScrollReveal();
 }
 
 // ─── DOM Ready ─────────────────────────────────────────────────
