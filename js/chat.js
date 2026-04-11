@@ -1,27 +1,92 @@
 /**
  * ╔══════════════════════════════════════════════════════════════╗
- * ║  Chat Bot Module                                             ║
- * ║  Live chat interface with Gemini AI & offline responses      ║
+ * ║  Professional Chat Bot Module                                ║
+ * ║  Enhanced with Conversation Memory & Business Intelligence   ║
  * ╚══════════════════════════════════════════════════════════════╝
  */
 
 import { API_KEY, GEMINI_MODEL } from './config.js';
+import { SERVICES, PROJECTS, FAQS } from './data.js';
+
+// ─── State Management ──────────────────────────────────────────
+let chatHistory = [];
+let isFirstOpen = true;
+let lastTopic = null; // Basic memory for offline mode
+
+// ─── Configuration ─────────────────────────────────────────────
+const SUGGESTIONS = [
+    { label: "❄️ خدمات التكييف", query: "ما هي خدمات التكييف التي تقدمونها؟" },
+    { label: "⚡ طوارئ كهرباء", query: "لدي مشكلة طارئة في الكهرباء، ماذا أفعل؟" },
+    { label: "💧 تسريب سباكة", query: "عندي تسريب مياه، كيف يمكنكم مساعدتي؟" },
+    { label: "📊 عرض سعر", query: "كيف يمكنني الحصول على عرض سعر لمشروعي؟" },
+    { label: "📹 كاميرات مراقبة", query: "هل تقومون بتركيب كاميرات المراقبة؟" }
+];
 
 // ─── Chat Window Toggle ────────────────────────────────────────
 
 export function toggleChat() {
     const chat = document.getElementById('chat-window');
+    const input = document.getElementById('chat-input');
+    
     if (chat.classList.contains('hidden')) {
         chat.classList.remove('hidden');
         setTimeout(() => {
             chat.classList.remove('scale-95', 'opacity-0');
             chat.classList.add('scale-100', 'opacity-100');
-        }, 10);
+            
+            // Auto-focus input
+            if (input) input.focus();
+
+            // Auto-greet on first open
+            if (isFirstOpen) {
+                setTimeout(sendInitialGreeting, 500);
+                isFirstOpen = false;
+            }
+        }, 30);
     } else {
         chat.classList.remove('scale-100', 'opacity-100');
         chat.classList.add('scale-95', 'opacity-0');
         setTimeout(() => chat.classList.add('hidden'), 300);
     }
+}
+
+// ─── Initial Greeting ──────────────────────────────────────────
+
+function sendInitialGreeting() {
+    const greeting = `مرحباً بك في **Seven Brothers Electromechanical**! 👋
+أنا مساعدك الذكي. يمكنني مساعدتك في أي استفسارات حول صيانة التكييف، الكهرباء، السباكة، وكافة الخدمات الفنية في **أبوظبي والإمارات**.
+
+كيف يمكنني مساعدتك اليوم؟`;
+    
+    addMessageToUI('bot', greeting);
+    renderSuggestions();
+}
+
+// ─── Suggestions Logic ─────────────────────────────────────────
+
+export function renderSuggestions() {
+    const container = document.getElementById('chat-suggestions');
+    if (!container) return;
+    
+    container.innerHTML = SUGGESTIONS.map(s => `
+        <button class="suggestion-chip" onclick="window.useSuggestion('${s.query}')">
+            ${s.label}
+        </button>
+    `).join('');
+    
+    container.classList.remove('hidden');
+    scrollToBottom();
+}
+
+export function useSuggestion(query) {
+    const input = document.getElementById('chat-input');
+    if (!input) return;
+    input.value = query;
+    sendChatMessage();
+    
+    // Hide suggestions after use to clean up UI
+    const suggestions = document.getElementById('chat-suggestions');
+    if (suggestions) suggestions.classList.add('hidden');
 }
 
 // ─── Chat Input Handler ────────────────────────────────────────
@@ -39,151 +104,180 @@ export function sendChatMessage() {
     const message = input.value.trim();
     if (!message) return;
 
-    const messagesContainer = document.getElementById('chat-messages');
-
-    // User Message
-    const userMsgHTML = `
-        <div class="flex justify-end">
-            <div class="bg-blue-600 text-white p-3 rounded-tl-xl rounded-bl-xl rounded-br-xl shadow-sm text-sm max-w-[85%]">
-                ${message}
-            </div>
-        </div>
-    `;
-    messagesContainer.insertAdjacentHTML('beforeend', userMsgHTML);
+    // Add User Message
+    addMessageToUI('user', message);
+    chatHistory.push({ role: "user", parts: [{ text: message }] });
+    
     input.value = '';
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    scrollToBottom();
 
-    // Bot Response (Loading)
-    const loadingId = 'loading-' + Date.now();
-    const loadingHTML = `
-        <div id="${loadingId}" class="flex justify-start">
-            <div class="bg-white border border-slate-200 text-slate-700 p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm text-sm max-w-[85%]">
-                <div class="flex gap-1">
-                    <span class="typing-dot"></span>
-                    <span class="typing-dot"></span>
-                    <span class="typing-dot"></span>
-                </div>
-            </div>
-        </div>
-    `;
-    messagesContainer.insertAdjacentHTML('beforeend', loadingHTML);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    // Show Loading
+    const loadingId = showLoading();
 
     // Call Gemini for Chat
     callGeminiChat(message).then(responseText => {
-        const loadingEl = document.getElementById(loadingId);
-        if (loadingEl) loadingEl.remove();
-
-        const botMsgHTML = `
-            <div class="flex justify-start">
-                <div class="bg-white border border-slate-200 text-slate-700 p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm text-sm max-w-[85%] leading-relaxed">
-                    ${marked.parse(responseText)}
-                </div>
-            </div>
-        `;
-        messagesContainer.insertAdjacentHTML('beforeend', botMsgHTML);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        hideLoading(loadingId);
+        addMessageToUI('bot', responseText);
+        chatHistory.push({ role: "model", parts: [{ text: responseText }] });
+        scrollToBottom();
     }).catch(err => {
-        const loadingEl = document.getElementById(loadingId);
-        if (loadingEl) loadingEl.remove();
+        hideLoading(loadingId);
+        addMessageToUI('error', "عذراً، حدث خطأ. يرجى المحاولة لاحقاً.");
+    });
+}
 
-        const errorHTML = `
-            <div class="flex justify-start">
-                <div class="bg-red-50 border border-red-100 text-red-600 p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm text-sm max-w-[85%]">
-                    عذراً، حدث خطأ في الاتصال. يرجى المحاولة لاحقاً.
+// ─── UI Helpers ────────────────────────────────────────────────
+
+function addMessageToUI(type, text) {
+    const container = document.getElementById('chat-messages');
+    if (!container) return;
+    
+    let html = '';
+
+    if (type === 'user') {
+        html = `
+            <div class="flex justify-end animate-fade-in mb-2">
+                <div class="message-user-bubble text-sm max-w-[85%]">
+                    ${text}
                 </div>
             </div>
         `;
-        messagesContainer.insertAdjacentHTML('beforeend', errorHTML);
-    });
+    } else if (type === 'bot') {
+        // Ensure marked is loaded (fallback to plain text if not)
+        const parsedText = window.marked ? marked.parse(text) : text;
+        html = `
+            <div class="flex justify-start animate-fade-in mb-2">
+                <div class="message-bot-bubble text-sm max-w-[85%]">
+                    ${parsedText}
+                </div>
+            </div>
+        `;
+    } else {
+        html = `
+            <div class="flex justify-start mb-2">
+                <div class="bg-red-50 text-red-600 p-3 rounded-xl text-xs border border-red-100">
+                    ${text}
+                </div>
+            </div>
+        `;
+    }
+
+    container.insertAdjacentHTML('beforeend', html);
+    scrollToBottom();
+}
+
+function showLoading() {
+    const container = document.getElementById('chat-messages');
+    const loadingId = 'loading-' + Date.now();
+    const loadingHTML = `
+        <div id="${loadingId}" class="flex justify-start mb-2">
+            <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                <div class="flex gap-1.5">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                </div>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', loadingHTML);
+    scrollToBottom();
+    return loadingId;
+}
+
+function hideLoading(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+}
+
+function scrollToBottom() {
+    const container = document.getElementById('chat-messages');
+    if (container) {
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior: 'smooth'
+        });
+    }
 }
 
 // ─── Gemini Chat API Call ──────────────────────────────────────
 
 async function callGeminiChat(userMessage) {
-    // If no API key, use smart offline responses
-    if (!API_KEY) {
+    if (!API_KEY || API_KEY === "") {
         return getOfflineChatResponse(userMessage);
     }
 
     const systemPrompt = `
-        You are a helpful customer service agent for Seven Brothers Electromechanical (UAE). 
-        Your goal is to assist users with their inquiries about maintenance services (AC, Plumbing, Electrical, etc.).
-        Rules:
-        1. Always reply in professional Arabic.
-        2. Keep answers concise and helpful.
-        3. If asked about prices, give general info but suggest a site visit for accurate quotes.
-        4. Be polite and engaging.
+        You are "SB Assistant", the official expert assistant for Seven Brothers Electromechanical (UAE).
+        Your primary goal is to help users with maintenance and technical services in Abu Dhabi and Dubai.
+
+        BUSINESS DATA:
+        - Services: ${SERVICES.map(s => s.title).join(', ')}
+        - Core Expertise: ${SERVICES.map(s => s.features.join(', ')).join(', ')}
+        - Key Projects: ${PROJECTS.slice(0, 5).map(p => p.title + " in " + p.location).join(', ')}
+        - Main Office: Abu Dhabi, UAE (we serve Abu Dhabi and surrounding areas primarily)
+        - Contact: +971 56 909 8867 | Email: sevenbrotherelectromechanical@gmail.com
+
+        RULES:
+        1. Always speak in professional and helpful Arabic.
+        2. Use the provided business data to give accurate answers. 
+        3. If asked about prices, explain that they depend on the scope and suggest a FREE site visit.
+        4. Maintain context. If the user refers to "it" or "the problem", check history to understand they mean the AC or plumbing.
+        5. Keep responses concise but thorough.
+        6. Use bullet points for readability.
     `;
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${API_KEY}`;
 
     const payload = {
-        contents: [{ parts: [{ text: userMessage }] }],
+        contents: chatHistory,
         systemInstruction: { parts: [{ text: systemPrompt }] }
     };
 
-    const response = await fetch(url, {
+    const result = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     });
 
-    if (!response.ok) throw new Error('API Error');
-    const data = await response.json();
+    if (!result.ok) throw new Error('API Error');
+    const data = await result.json();
     return data.candidates[0].content.parts[0].text;
 }
 
-// ─── Smart Offline Chat Responses ──────────────────────────────
-// Keyword-based responses when API key is not configured
+// ─── Smart Offline Chat Responses (Enhanced Memory) ────────────
 
 async function getOfflineChatResponse(userMessage) {
     await new Promise(r => setTimeout(r, 1000));
-
     const lowerMsg = userMessage.toLowerCase();
-
-    if (lowerMsg.match(/(مرحبا|هلا|السلام|hi|hello|hey)/)) {
-        return "أهلاً بك في Seven Brothers Electromechanical! 🛠️\nكيف يمكنني مساعدتك اليوم في خدمات الصيانة؟";
+    
+    // Check for "What did I ask?" or "Memory" questions
+    if (lowerMsg.match(/(ذكر|سألتك|قبل قليل|what did I ask)/)) {
+        if (lastTopic) {
+            return `لقد سألتني للتو عن **${lastTopic}**. كيف يمكنني التعمق أكثر في هذا الموضوع لمساعدتك؟`;
+        }
+        return "لقد بدأنا المحادثة للتو! أخبرني كيف يمكنني مساعدتك في خدمات الصيانة في **أبوظبي**؟";
     }
 
-    if (lowerMsg.match(/(تكييف|مكيف|تبريد|حار|ac|cool)/)) {
-        return "نقدم خدمات متكاملة للتكييف تشمل:\n❄️ صيانة وقائية\n❄️ تنظيف الدكت\n❄️ تعبئة غاز\n❄️ إصلاح الكمبروسر\n\nهل تود حجز موعد للصيانة؟";
+    if (lowerMsg.match(/(تكييف|مكيف|ac)/)) {
+        lastTopic = "صيانة التكييف";
+        return "لدينا خبرة واسعة في صيانة التكييف المركزي والـ Split. نخدم كافة مناطق **أبوظبي ودبي**. هل تود حجز موعد للمعاينة؟";
     }
-
-    if (lowerMsg.match(/(كهرباء|لمبة|فيش|قاطع|electric|power|light)/)) {
-        return "فريقنا الكهربائي جاهز للمساعدة في:\n⚡ تمديد الأسلاك\n⚡ تركيب الإضاءة والمقابس\n⚡ إصلاح الأعطال وانقطاع التيار\n\nنضمن لك أعلى معايير السلامة.";
+    
+    if (lowerMsg.match(/(كهرباء|electric)/)) {
+        lastTopic = "الأعمال الكهربائية";
+        return "فريقنا الكهربائي معتمد وخبير في تمديدات الفلل والمكاتب. هل تعاني من انقطاع مفاجئ؟";
     }
-
-    if (lowerMsg.match(/(سباكة|ماء|تسريب|مواسير|plumb|water|leak)/)) {
-        return "خدمات السباكة لدينا تشمل:\n💧 كشف التسربات\n💧 تركيب وإصلاح الأنابيب\n💧 صيانة السخانات والمضخات\n\nهل المشكلة طارئة؟";
-    }
-
-    if (lowerMsg.match(/(دهان|صباغة|لون|جدار|paint)/)) {
-        return "نقدم خدمات صباغة احترافية:\n🎨 دهانات داخلية وخارجية\n🎨 معالجة الشقوق والرطوبة\n🎨 دهانات ديكورية\n\nيمكننا إرسال كتالوج الألوان إليك.";
-    }
-
-    if (lowerMsg.match(/(كاميرا|مراقبة|سكيورتي|انذار|cctv|camera|security)/)) {
-        return "نوفر حلولاً أمنية متكاملة:\n📹 توريد وتركيب كاميرات دقيقة\n📹 صيانة أنظمة المراقبة (DVR/NVR)\n📹 تركيب أجهزة التحكم بالدخول\n\nهل ترغب بتأمين منزلك أم مكان عملك؟";
-    }
-
-    if (lowerMsg.match(/(سعر|تكلفة|بكم|فلوس|price|cost)/)) {
-        return "تعتمد التكلفة على نوع الخدمة وحجم العمل. 💰\nننصح بحجز **معاينة مجانية** لتقديم عرض سعر دقيق.\nيمكنك الاتصال بنا على +971 56 909 8867.";
-    }
-
-    if (lowerMsg.match(/(موقع|عنوان|وين|location|address)/)) {
-        return "مقرنا في **أبوظبي، الإمارات**.\nونخدم جميع المناطق المجاورة. 📍";
-    }
-
-    if (lowerMsg.match(/(رقم|تليفون|اتصال|contact|phone)/)) {
-        return "يمكنك التواصل معنا مباشرة عبر:\n📞 الهاتف: +971 56 909 8867\n📧 البريد: sevenbrotherelectromechanical@gmail.com";
-    }
-
-    // Default Fallback
-    return "شكراً لتواصلك معنا. نحن متخصصون في جميع أعمال الصيانة (تكييف، كهرباء، سباكة، دهانات). يرجى وصف مشكلتك وسنقوم بمساعدتك، أو يمكنك الاتصال بنا مباشرة.";
+    
+    if (lowerMsg.match(/(سعر|تكلفة|بكم)/)) return "تعتمد التكلفة على حجم العمل. يمكننا إرسال فني للمعاينة مجاناً وتقديم عرض سعر دقيق. اتصل بنا على +971 56 909 8867.";
+    if (lowerMsg.match(/(رقم|تواصل|واتس)/)) return "يمكنك الاتصال بنا على +971 56 909 8867 أو مراسلتنا عبر واتساب للمساعدة الفورية.";
+    
+    return "شكراً لتواصلك. أنا أعمل حالياً في وضع المساعدة المحدودة، ولكنني أتذكر اهتمامك بقطاع الصيانة. يرجى الاتصال بنا مباشرة للحصول على رد فوري من خبير.";
 }
 
 // ─── Register Global Handlers ──────────────────────────────────
-
 window.toggleChat = toggleChat;
 window.handleChatInput = handleChatInput;
 window.sendChatMessage = sendChatMessage;
+window.useSuggestion = useSuggestion;
+window.renderSuggestions = renderSuggestions;
