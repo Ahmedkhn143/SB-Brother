@@ -13,9 +13,60 @@
 // ─── Gemini AI Configuration ───────────────────────────────────
 // To enable AI features, add your Gemini API key here.
 // For production: route requests through a backend proxy.
-export const API_KEY = "AIzaSyD0JTOw-M-Jmm3Upe73ctJeud21CkF9NDY";
+export const API_KEY = "";
 
-export const GEMINI_MODEL = "gemini-1.5-flash";
+export const GEMINI_MODEL = "gemini-2.5-flash";
+
+// Resolve API key from multiple sources so key rotation does not require code edits.
+export function getGeminiApiKey() {
+	const fallback = (API_KEY || '').trim();
+
+	if (typeof window === 'undefined') {
+		return fallback;
+	}
+
+	const runtimeKey = (
+		window.SB_RUNTIME_CONFIG?.geminiApiKey ||
+		window.SB_GEMINI_API_KEY ||
+		''
+	).trim();
+
+	let localStorageKey = '';
+	try {
+		localStorageKey = (window.localStorage.getItem('SB_GEMINI_API_KEY') || '').trim();
+	} catch (_) {
+		// Ignore storage access issues in restricted browser modes.
+	}
+
+	return runtimeKey || localStorageKey || fallback;
+}
+
+export function setGeminiApiKey(key) {
+	if (typeof window === 'undefined') return;
+
+	const value = (key || '').trim();
+	if (!value) return;
+
+	try {
+		window.localStorage.setItem('SB_GEMINI_API_KEY', value);
+	} catch (_) {
+		// Ignore storage write errors.
+	}
+}
+
+export function clearGeminiApiKey() {
+	if (typeof window === 'undefined') return;
+	try {
+		window.localStorage.removeItem('SB_GEMINI_API_KEY');
+	} catch (_) {
+		// Ignore storage removal errors.
+	}
+}
+
+if (typeof window !== 'undefined') {
+	window.setGeminiApiKey = setGeminiApiKey;
+	window.clearGeminiApiKey = clearGeminiApiKey;
+}
 
 // ─── Company Contact Information ───────────────────────────────
 export const WHATSAPP_NUMBER = "971569098867";

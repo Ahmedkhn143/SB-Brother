@@ -5,7 +5,7 @@
  * ╚══════════════════════════════════════════════════════════════╝
  */
 
-import { API_KEY, GEMINI_MODEL } from './config.js';
+import { GEMINI_MODEL, getGeminiApiKey } from './config.js';
 import { SERVICES, PROJECTS, FAQS } from './data.js';
 
 // ─── State Management ──────────────────────────────────────────
@@ -123,13 +123,17 @@ export function sendChatMessage() {
     }).catch(err => {
         hideLoading(loadingId);
         if (err.message === 'QUOTA_EXCEEDED') {
-            addMessageToUI('error-quota', ""); // Logic for special quota msg
             // Fallback to offline mode for this specific request
             getOfflineChatResponse(message).then(fallbackText => {
-                addMessageToUI('bot', fallbackText + "\n\n*(ملاحظة: هذا رد تلقائي بسبب وصول مفتاح الـ API للحد الأقصى)*");
+                addMessageToUI('bot', fallbackText);
             });
         } else {
-            addMessageToUI('error', "عذراً، حدث خطأ. يرجى المحاولة لاحقاً.");
+            // Any API/network/model failure should still produce a useful reply.
+            getOfflineChatResponse(message).then(fallbackText => {
+                addMessageToUI('bot', fallbackText);
+            }).catch(() => {
+                addMessageToUI('error', "عذراً، حدث خطأ. يرجى المحاولة لاحقاً.");
+            });
         }
     });
 }
@@ -219,7 +223,9 @@ function scrollToBottom() {
 // ─── Gemini Chat API Call ──────────────────────────────────────
 
 async function callGeminiChat(userMessage) {
-    if (!API_KEY || API_KEY === "") {
+    const apiKey = getGeminiApiKey();
+
+    if (!apiKey) {
         return getOfflineChatResponse(userMessage);
     }
 
@@ -243,7 +249,7 @@ async function callGeminiChat(userMessage) {
         6. Use bullet points for readability.
     `;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
 
     const payload = {
         contents: chatHistory,
@@ -261,9 +267,34 @@ async function callGeminiChat(userMessage) {
             throw new Error('QUOTA_EXCEEDED');
         }
 
-        if (!result.ok) throw new Error('API Error');
+        if (!result.ok) {
+            let apiErrorMessage = '';
+            try {
+                const apiError = await result.json();
+                apiErrorMessage = apiError?.error?.message || '';
+            } catch (_) {
+                // Ignore malformed/empty error payloads
+            }
+
+            if (result.status === 404 || /not found/i.test(apiErrorMessage)) {
+                throw new Error('MODEL_NOT_FOUND');
+            }
+
+            if (result.status === 401 || result.status === 403) {
+                throw new Error('AUTH_ERROR');
+            }
+
+            throw new Error('API_ERROR');
+        }
+
         const data = await result.json();
-        return data.candidates[0].content.parts[0].text;
+        const responseText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (!responseText) {
+            throw new Error('EMPTY_RESPONSE');
+        }
+
+        return responseText;
     } catch (e) {
         throw e;
     }
@@ -296,7 +327,7 @@ async function getOfflineChatResponse(userMessage) {
     if (lowerMsg.match(/(سعر|تكلفة|بكم)/)) return "تعتمد التكلفة على حجم العمل. يمكننا إرسال فني للمعاينة مجاناً وتقديم عرض سعر دقيق. اتصل بنا على +971 56 909 8867.";
     if (lowerMsg.match(/(رقم|تواصل|واتس)/)) return "يمكنك الاتصال بنا على +971 56 909 8867 أو مراسلتنا عبر واتساب للمساعدة الفورية.";
     
-    return "شكراً لتواصلك. أنا أعمل حالياً في وضع المساعدة المحدودة، ولكنني أتذكر اهتمامك بقطاع الصيانة. يرجى الاتصال بنا مباشرة للحصول على رد فوري من خبير.";
+    return "أهلاً بك! نقدر نساعدك في خدمات الصيانة (تكييف، كهرباء، سباكة، دهانات، وأنظمة أمنية). اكتب المشكلة بالتفصيل وسأعطيك توجيهاً سريعاً وخطوات مناسبة.";
 }
 
 // ─── Register Global Handlers ──────────────────────────────────

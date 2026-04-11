@@ -5,7 +5,7 @@
  * ╚══════════════════════════════════════════════════════════════╝
  */
 
-import { API_KEY, GEMINI_MODEL } from './config.js';
+import { GEMINI_MODEL, getGeminiApiKey } from './config.js';
 import { navigateTo } from './navigation.js';
 
 // ─── Analyze Problem (Main Entry) ──────────────────────────────
@@ -76,8 +76,10 @@ export async function analyzeProblem() {
 // ─── Gemini API Call (with Smart Offline Fallback) ──────────────
 
 async function callGeminiAPI(userMessage) {
+    const apiKey = getGeminiApiKey();
+
     // If no API key, use expert offline logic
-    if (!API_KEY) {
+    if (!apiKey) {
         return getOfflineAnalysis(userMessage);
     }
 
@@ -92,7 +94,7 @@ async function callGeminiAPI(userMessage) {
         }
     `;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
 
     const payload = {
         contents: [{ parts: [{ text: userMessage }] }],
@@ -106,9 +108,19 @@ async function callGeminiAPI(userMessage) {
         body: JSON.stringify(payload)
     });
 
-    if (!response.ok) throw new Error('API Error');
+    if (!response.ok) {
+        // Keep feature usable even when model/key/network fails.
+        return getOfflineAnalysis(userMessage);
+    }
+
     const data = await response.json();
-    return data.candidates[0].content.parts[0].text;
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!text) {
+        return getOfflineAnalysis(userMessage);
+    }
+
+    return text;
 }
 
 // ─── Smart Offline Analysis ────────────────────────────────────
